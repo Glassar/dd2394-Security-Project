@@ -25,7 +25,8 @@ def send_qubit(alice_base, bobs_base):
     bell = QuantumCircuit(qbits, measure)
 
     # Creates singlet state
-    bell.initialize(3)
+    bell.x(qbits[0])
+    bell.x(qbits[1])
     bell.h(qbits[0])
     bell.cx(qbits[0], 1)
 
@@ -52,7 +53,6 @@ def send_qubit(alice_base, bobs_base):
     elif(bobs_base == "Z"):                 # B2 direction (standard Z basis)
         bell.measure(qbits[1], measure[1])
     elif(bobs_base == "W"):                 # B3 direction
-        bell.measure(qbits[1], measure[1])
         bell.s(qbits[1])
         bell.h(qbits[1])
         bell.tdg(qbits[1])
@@ -78,16 +78,6 @@ def measure_all_qubits(aliceBasis, bobBasis):
 
 def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
-<<<<<<< HEAD
-    spotCheck = []
-
-    for i in range(n):
-        spotCheck.append(0 if random.randint(0, 4) != 0 else 1)
-
-    print("Spot checking array: ", spotCheck)
-
-=======
->>>>>>> ca7e97077ee86a1015f05b692c934479f4128719
     alicesMeasurement, bobsMeasurement = measure_all_qubits(aliceBasis, bobBasis)
 
     print("Alice's bases: X, Y, Z")
@@ -100,6 +90,7 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
     bobKey = []
 
     chsh_counts = np.zeros((4,4))
+    
 
     # Compare bases 
     for i in range(n):
@@ -129,19 +120,6 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
 aliceKey, bobKey = sync_bases_and_build_keys(aliceBasis, bobBasis)
 
-def spotCheck(spotsToCheck):
-    miss_matched_bits = 0
-    for i in range(len(spotsToCheck[0])):
-        if spotsToCheck[0][i] != spotsToCheck[1][i]:
-            miss_matched_bits += 1
-
-    print("Miss matched bits:", miss_matched_bits, "of", len(spotsToCheck[0]))
-
-<<<<<<< HEAD
-spotCheck(spotsToCheck)
-
 print("Length of key: ", len(aliceKey))
-=======
->>>>>>> ca7e97077ee86a1015f05b692c934479f4128719
 print("Alice's key:", aliceKey)
 print("Bob's key:", bobKey)

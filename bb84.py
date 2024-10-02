@@ -18,17 +18,8 @@ def noise_protocol():
 
     return noise_model
 
-<<<<<<< HEAD
-print(f"Alice's State:\t {np.array2string(aliceBinary)}")
-print(f"Alice's Bases:\t {np.array2string(aliceBasis)}")
-print(f"Bob's Bases:\t {np.array2string(bobBasis)}")
-      
-print("Shared key: ")
-def quantumSend(aBit, aBase, bBase):
-=======
 def quantumSend(aBit, aBase, bBase, use_noise=False):
     # Create a circuit with 1 qubit
->>>>>>> ca7e97077ee86a1015f05b692c934479f4128719
     circuit = QuantumCircuit(1)
 
     # Alice's bit
@@ -50,15 +41,6 @@ def quantumSend(aBit, aBase, bBase, use_noise=False):
     circuit.measure_all()
 
     t = transpile(circuit, simulator)
-<<<<<<< HEAD
-    
-    return simulator.run(t, shots=1, memory=True).result().get_counts(t)
-
-for i in range(n):
-    if(aliceBasis[i] == bobBasis[i]):
-        print(quantumSend(aliceBinary[i], aliceBasis[i], bobBasis[i]))
-        
-=======
 
     if use_noise:
         noise_model = noise_protocol()
@@ -101,4 +83,3 @@ error = spot_checking(aliceKey, bobKey, int(numberOfBits/2))
 print(f"Alice key: {aliceKey}")
 print(f"Bob key  : {bobKey}")
 print(f"Error: {error}")
->>>>>>> ca7e97077ee86a1015f05b692c934479f4128719
