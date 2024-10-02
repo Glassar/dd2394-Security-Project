@@ -11,6 +11,11 @@ aliceBinary = np.random.randint(2, size= n)
 aliceBasis = np.random.randint(2, size= n)
 bobBasis = np.random.randint(2, size= n)
 
+print(f"Alice's State:\t {np.array2string(aliceBinary)}")
+print(f"Alice's Bases:\t {np.array2string(aliceBasis)}")
+print(f"Bob's Bases:\t {np.array2string(bobBasis)}")
+      
+print("Shared key: ")
 def quantumSend(aBit, aBase, bBase):
     circuit = QuantumCircuit(1)
 
@@ -26,9 +31,10 @@ def quantumSend(aBit, aBase, bBase):
     circuit.measure_all()
 
     t = transpile(circuit, simulator)
-
+    
     return simulator.run(t, shots=1, memory=True).result().get_counts(t)
 
 for i in range(n):
     if(aliceBasis[i] == bobBasis[i]):
         print(quantumSend(aliceBinary[i], aliceBasis[i], bobBasis[i]))
+        

@@ -5,7 +5,7 @@ import random
 
 simulator = AerSimulator()
 
-n = 16
+n = 1024
 
 aliceBasis = [] 
 bobBasis = []
@@ -78,11 +78,11 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
     alicesMeasurement, bobsMeasurement = measure_all_qubits(aliceBasis, bobBasis)
 
-    print("Alice: My bases are X, Y, Z")
-    print("Alice: My random basis is:", aliceBasis)
+    print("Alice's bases: X, Y, Z")
+    print("Alice's measurements: ", aliceBasis)
 
-    print("Bob: My bases are Y, Z, W")
-    print("Bob: My random basis is:", bobBasis)
+    print("Bob's bases: Y, Z, W")
+    print("Bob's measurements: ", bobBasis)
 
     aliceKey = []
     bobKey = []
@@ -96,5 +96,6 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
 aliceKey, bobKey = sync_bases_and_build_keys(aliceBasis, bobBasis)
 
+print("Length of key: ", len(aliceKey))
 print("Alice's key:", aliceKey)
 print("Bob's key:", bobKey)
