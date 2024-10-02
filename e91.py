@@ -5,7 +5,7 @@ import random
 
 simulator = AerSimulator()
 
-n = 16
+n = 32
 
 aliceBasis = [] 
 bobBasis = []
@@ -76,6 +76,13 @@ def measure_all_qubits(aliceBasis, bobBasis):
 
 def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
+    spotCheck = []
+
+    for i in range(n):
+        spotCheck.append(0 if random.randint(0, 5) != 0 else 1)
+
+    print("Spot checking array:", spotCheck)
+
     alicesMeasurement, bobsMeasurement = measure_all_qubits(aliceBasis, bobBasis)
 
     print("Alice: My bases are X, Y, Z")
@@ -91,6 +98,8 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
         if(aliceBasis[i] == bobBasis[i]):
             aliceKey.append(alicesMeasurement[i])
             bobKey.append(bobsMeasurement[i])
+            if(spotCheck[i]):
+                print (alicesMeasurement[i] == bobsMeasurement[i])
 
     return(aliceKey, bobKey)
 
