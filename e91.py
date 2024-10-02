@@ -76,13 +76,6 @@ def measure_all_qubits(aliceBasis, bobBasis):
 
 def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
-    spotCheck = []
-
-    for i in range(n):
-        spotCheck.append(0 if random.randint(0, 4) != 0 else 1)
-
-    print("Spot checking array:", spotCheck)
-
     alicesMeasurement, bobsMeasurement = measure_all_qubits(aliceBasis, bobBasis)
 
     print("Alice: My bases are X, Y, Z")
@@ -94,22 +87,34 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
     aliceKey = []
     bobKey = []
 
-    spotsToCheck = [[], []]
+    chsh_counts = np.zeros((4,4))
 
     for i in range(n):
         if(aliceBasis[i] == bobBasis[i]):
-            if(spotCheck[i]):
-                spotsToCheck[0].append(alicesMeasurement[i])
-                spotsToCheck[1].append(bobsMeasurement[i])
-            else:
-                aliceKey.append(alicesMeasurement[i])
-                bobKey.append(bobsMeasurement[i])
+            aliceKey.append(alicesMeasurement[i])
+            bobKey.append(bobsMeasurement[i])   
+        else:
+            if(aliceBasis[i] == "X" and bobBasis[i] == "Y"):
+                chsh_counts[0][2*alicesMeasurement[i]+bobsMeasurement[i]] += 1
+            elif(aliceBasis[i] == "X" and bobBasis[i] == "W"):
+                chsh_counts[1][2*alicesMeasurement[i]+bobsMeasurement[i]] += 1
+            elif(aliceBasis[i] == "Z" and bobBasis[i] == "Y"):
+                chsh_counts[2][2*alicesMeasurement[i]+bobsMeasurement[i]] += 1
+            elif(aliceBasis[i] == "Z" and bobBasis[i] == "W"):
+                chsh_counts[3][2*alicesMeasurement[i]+bobsMeasurement[i]] += 1
 
-    print(spotsToCheck)
+    expectXY = (chsh_counts[0][0] - chsh_counts[0][1] - chsh_counts[0][2] + chsh_counts[0][3])/sum(chsh_counts[0])
+    expectXW = (chsh_counts[1][0] - chsh_counts[1][1] - chsh_counts[1][2] + chsh_counts[1][3])/sum(chsh_counts[1])
+    expectZX = (chsh_counts[2][0] - chsh_counts[2][1] - chsh_counts[2][2] + chsh_counts[2][3])/sum(chsh_counts[2])
+    expectZW = (chsh_counts[3][0] - chsh_counts[3][1] - chsh_counts[3][2] + chsh_counts[3][3])/sum(chsh_counts[3])
 
-    return aliceKey, bobKey, spotsToCheck
+    corr = expectXY - expectXW + expectZX + expectZW
 
-aliceKey, bobKey, spotsToCheck = sync_bases_and_build_keys(aliceBasis, bobBasis)
+    print(round(corr, 3))
+            
+    return aliceKey, bobKey
+
+aliceKey, bobKey = sync_bases_and_build_keys(aliceBasis, bobBasis)
 
 def spotCheck(spotsToCheck):
     miss_matched_bits = 0
@@ -118,8 +123,6 @@ def spotCheck(spotsToCheck):
             miss_matched_bits += 1
 
     print("Miss matched bits:", miss_matched_bits, "of", len(spotsToCheck[0]))
-
-spotCheck(spotsToCheck)
 
 print("Alice's key:", aliceKey)
 print("Bob's key:", bobKey)
