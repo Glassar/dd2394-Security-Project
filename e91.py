@@ -4,8 +4,9 @@ import numpy as np
 import random
 
 simulator = AerSimulator()
+
 # Number of qubits
-n = 16
+n = 1024
 
 aliceBasis = [] 
 bobBasis = []
@@ -80,7 +81,7 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
     spotCheck = []
 
     for i in range(n):
-        spotCheck.append(0 if random.randint(0, 5) != 0 else 1)
+        spotCheck.append(0 if random.randint(0, 4) != 0 else 1)
 
     print("Spot checking array: ", spotCheck)
 
@@ -94,17 +95,34 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
     aliceKey = []
     bobKey = []
-    # Comparing measurements
+
+    spotsToCheck = [[], []]
+
+    # Compare bases 
     for i in range(n):
         if(aliceBasis[i] == bobBasis[i]):
-            aliceKey.append(alicesMeasurement[i])
-            bobKey.append(bobsMeasurement[i])
             if(spotCheck[i]):
-                print(alicesMeasurement[i] == bobsMeasurement[i])
+                spotsToCheck[0].append(alicesMeasurement[i])
+                spotsToCheck[1].append(bobsMeasurement[i])
+            else:
+                aliceKey.append(alicesMeasurement[i])
+                bobKey.append(bobsMeasurement[i])
 
-    return(aliceKey, bobKey)
+    print(spotsToCheck)
 
-aliceKey, bobKey = sync_bases_and_build_keys(aliceBasis, bobBasis)
+    return aliceKey, bobKey, spotsToCheck
+
+aliceKey, bobKey, spotsToCheck = sync_bases_and_build_keys(aliceBasis, bobBasis)
+
+def spotCheck(spotsToCheck):
+    miss_matched_bits = 0
+    for i in range(len(spotsToCheck[0])):
+        if spotsToCheck[0][i] != spotsToCheck[1][i]:
+            miss_matched_bits += 1
+
+    print("Miss matched bits:", miss_matched_bits, "of", len(spotsToCheck[0]))
+
+spotCheck(spotsToCheck)
 
 print("Length of key: ", len(aliceKey))
 print("Alice's key:", aliceKey)
