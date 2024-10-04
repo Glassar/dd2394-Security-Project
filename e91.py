@@ -4,6 +4,7 @@ import numpy as np
 import random
 from qiskit_aer.noise import NoiseModel, ReadoutError
 from qiskit_aer.noise.errors import depolarizing_error
+import math
 
 simulator = AerSimulator()
 
@@ -74,7 +75,7 @@ def send_qubit(alice_base, bobs_base):
         bell.measure(qbits[1], measure[1])
 
     t_bell = transpile(bell, simulator)
-
+    
     return simulator.run(t_bell, shots=1, memory=True, noise_model = noise_protocol()).result().get_memory(t_bell)[0]
 
 
@@ -126,7 +127,8 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
     corr = expectXY - expectXW + expectZY + expectZW
 
-    print("CHSH correlation value: ", round(corr, 3))
+    print("CHSH correlation value:", round(corr, 3))
+    print("Diff from 2*sqrt(2):", round((2*math.sqrt(2) - corr), 3))
             
     return aliceKey, bobKey
 
