@@ -9,10 +9,11 @@ import math
 simulator = AerSimulator()
 
 # Number of qubits
-n = 1024
-useNoise = True
+n = 32
+
+useNoise = False
 evePresent = True
-eveInterceptionRate = 0.5
+eveInterceptionRate = 1
 
 aliceBasis = [] 
 bobBasis = []
@@ -53,6 +54,16 @@ def send_qubit(alice_base, bobs_base, eve_present = False, eve_base = "", eve_in
     bell.h(qbits[0])
     bell.cx(qbits[0], 1)
 
+    if eve_present and eve_intercepts == 1:
+        if(eve_base == "Y"):
+            bell.s(qbits[1])
+            bell.h(qbits[1])
+            bell.t(qbits[1])
+            bell.h(qbits[1])
+            bell.measure(qbits[1], measure[2])
+        elif(eve_base == "Z"):
+            bell.measure(qbits[1], measure[2])
+
     # Alice's base 
     if(alice_base == "X"):                  # A1 direction
         bell.h(qbits[0])
@@ -65,16 +76,6 @@ def send_qubit(alice_base, bobs_base, eve_present = False, eve_base = "", eve_in
         bell.measure(qbits[0], measure[0])
     elif(alice_base == "Z"):                # A3 direction (standard Z basis)
         bell.measure(qbits[0], measure[0])
-
-    if eve_present and eve_intercepts == 1:
-        if(eve_base == "Y"):
-            bell.s(qbits[1])
-            bell.h(qbits[1])
-            bell.t(qbits[1])
-            bell.h(qbits[1])
-            bell.measure(qbits[1], measure[2])
-        elif(eve_base == "Z"):
-            bell.measure(qbits[1], measure[2])
 
     # Bob's base 
     if(bobs_base == "Y"):                   # B1 direction
@@ -107,32 +108,35 @@ def measure_all_qubits(aliceBasis, bobBasis, eve_present = False, eveBasis = [],
 
     for i in range(n):
         if(eve_present):
-            output = send_qubit(aliceBasis[i],bobBasis[i], eve_present, eveBasis, eveInterceptions)
-            alicesMeasurement.append(1 if not int (output[0]) else 0)
+            output = send_qubit(aliceBasis[i],bobBasis[i], eve_present, eveBasis[i], eveInterceptions[i])
+            alicesMeasurement.append(1 if not int (output[2]) else 0)
             bobsMeasurement.append(int (output[1]))
-            eveMeasurement.append(int (output[2]))
+            if (eveIntercepts[i]):
+                eveMeasurement.append(int (output[0]))
+            else:
+                eveMeasurement.append(np.nan)
         else:
             output = send_qubit(aliceBasis[i],bobBasis[i])
-            alicesMeasurement.append(1 if not int (output[0]) else 0)
+            alicesMeasurement.append(1 if not int (output[2]) else 0)
             bobsMeasurement.append(int (output[1]))
+            
 
     return alicesMeasurement, bobsMeasurement, eveMeasurement
 
 def sync_bases_and_build_keys(aliceBasis, bobBasis, eve_present = False, eveBasis = [], eveInterceptions = []):
 
     alicesMeasurement, bobsMeasurement, eveMeasurement = measure_all_qubits(aliceBasis, bobBasis, eve_present, eveBasis, eveInterceptions)
-
+    
     print("Alice's bases: X, Y, Z")
-
     print("Bob's bases: Y, Z, W")
-
+    
     aliceKey = []
     bobKey = []
     eveKey = []
+    misMatchedBits = 0
 
     chsh_counts = np.zeros((4,4))
     
-
     # Compare bases 
     for i in range(n):
         if(aliceBasis[i] == bobBasis[i]):
@@ -141,7 +145,7 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis, eve_present = False, eveBasi
             if(eve_present and eveBasis[i] == bobBasis[i]):
                 eveKey.append(eveMeasurement[i])
             else:
-                eveKey.append(-1)
+                eveKey.append(np.nan)
         else:
             if(aliceBasis[i] == "X" and bobBasis[i] == "Y"):
                 chsh_counts[0][2*alicesMeasurement[i]+bobsMeasurement[i]] += 1
@@ -158,18 +162,25 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis, eve_present = False, eveBasi
     expectZW = (chsh_counts[3][0] - chsh_counts[3][1] - chsh_counts[3][2] + chsh_counts[3][3])/(sum(chsh_counts[3]) if sum(chsh_counts[3]) else 1)
 
     corr = expectXY - expectXW + expectZY + expectZW
-
+    
     print("CHSH correlation value:", round(corr, 3))
     print("Diff from 2*sqrt(2):", round((2*math.sqrt(2) - corr), 3))
-            
+    
+    print(f"Length of key: {len(aliceKey)}")
+    print(f"Alice's key: {aliceKey}")
+    print(f"Bob's key: {bobKey}")
+    
+    if (eve_present):
+        for i in range(len(aliceKey)):
+            if (aliceKey[i] != bobKey[i]):
+                misMatchedBits += 1
+        print(f"Eve's key: {eveKey}")
+        print(f"Mismatched bits: {misMatchedBits}")
+        
     return aliceKey, bobKey, eveKey
 
-aliceKey, bobKey, eveKey = sync_bases_and_build_keys(aliceBasis, bobBasis, evePresent, eveBasis, eveIntercepts)
+sync_bases_and_build_keys(aliceBasis, bobBasis, evePresent, eveBasis, eveIntercepts)
 
-print(f"Length of key: {len(aliceKey)}")
-print(f"Alice's key: {aliceKey}")
-print(f"Bob's key: {bobKey}")
+    
 
-if(evePresent):
-    print(f"Eve's key: {eveKey}")
 
