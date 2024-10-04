@@ -10,9 +10,15 @@ simulator = AerSimulator()
 
 # Number of qubits
 n = 1024
+useNoise = True
+evePresent = True
+eveInterceptionRate = 0.5
 
 aliceBasis = [] 
 bobBasis = []
+
+eveBasis = []
+eveIntercepts = []
 
 def noise_protocol():
     noise_model = NoiseModel()
@@ -30,13 +36,15 @@ def noise_protocol():
 for i in range(n):
     aliceBasis.append(random.choice(["X", "Y", "Z"]))
     bobBasis.append(random.choice(["Y", "Z", "W"]))
+    if evePresent:
+        eveBasis.append(random.choice(["Y", "Z"])) # Optimal choice of bases, if not shared before than this would be way harder
+        eveIntercepts.append(0 if random.random() > eveInterceptionRate else 1)
 
-
-def send_qubit(alice_base, bobs_base):
+def send_qubit(alice_base, bobs_base, eve_present = False, eve_base = "", eve_intercepts = 0):
     
     # Charlie generating entangled particles
     qbits = QuantumRegister(2, 'q')
-    measure = ClassicalRegister(2, 'c')
+    measure = ClassicalRegister(3, 'c')
     bell = QuantumCircuit(qbits, measure)
 
     # Creates singlet state
@@ -58,6 +66,16 @@ def send_qubit(alice_base, bobs_base):
     elif(alice_base == "Z"):                # A3 direction (standard Z basis)
         bell.measure(qbits[0], measure[0])
 
+    if eve_present and eve_intercepts == 1:
+        if(eve_base == "Y"):
+            bell.s(qbits[1])
+            bell.h(qbits[1])
+            bell.t(qbits[1])
+            bell.h(qbits[1])
+            bell.measure(qbits[1], measure[2])
+        elif(eve_base == "Z"):
+            bell.measure(qbits[1], measure[2])
+
     # Bob's base 
     if(bobs_base == "Y"):                   # B1 direction
         bell.s(qbits[1])
@@ -75,25 +93,34 @@ def send_qubit(alice_base, bobs_base):
         bell.measure(qbits[1], measure[1])
 
     t_bell = transpile(bell, simulator)
-    
-    return simulator.run(t_bell, shots=1, memory=True, noise_model = noise_protocol()).result().get_memory(t_bell)[0]
 
+    if useNoise:
+        return simulator.run(t_bell, shots=1, memory=True, noise_model = noise_protocol()).result().get_memory(t_bell)[0]
+    else:
+        return simulator.run(t_bell, shots=1, memory=True).result().get_memory(t_bell)[0]
 
-def measure_all_qubits(aliceBasis, bobBasis):
+def measure_all_qubits(aliceBasis, bobBasis, eve_present = False, eveBasis = [], eveInterceptions = []):
 
     alicesMeasurement = []
     bobsMeasurement = []
+    eveMeasurement = []
 
     for i in range(n):
-        output = send_qubit(aliceBasis[i],bobBasis[i])
-        alicesMeasurement.append(1 if not int (output[0]) else 0)
-        bobsMeasurement.append(int (output[1]))
+        if(eve_present):
+            output = send_qubit(aliceBasis[i],bobBasis[i], eve_present, eveBasis, eveInterceptions)
+            alicesMeasurement.append(1 if not int (output[0]) else 0)
+            bobsMeasurement.append(int (output[1]))
+            eveMeasurement.append(int (output[2]))
+        else:
+            output = send_qubit(aliceBasis[i],bobBasis[i])
+            alicesMeasurement.append(1 if not int (output[0]) else 0)
+            bobsMeasurement.append(int (output[1]))
 
-    return alicesMeasurement, bobsMeasurement
+    return alicesMeasurement, bobsMeasurement, eveMeasurement
 
-def sync_bases_and_build_keys(aliceBasis, bobBasis):
+def sync_bases_and_build_keys(aliceBasis, bobBasis, eve_present = False, eveBasis = [], eveInterceptions = []):
 
-    alicesMeasurement, bobsMeasurement = measure_all_qubits(aliceBasis, bobBasis)
+    alicesMeasurement, bobsMeasurement, eveMeasurement = measure_all_qubits(aliceBasis, bobBasis, eve_present, eveBasis, eveInterceptions)
 
     print("Alice's bases: X, Y, Z")
 
@@ -101,6 +128,7 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
     aliceKey = []
     bobKey = []
+    eveKey = []
 
     chsh_counts = np.zeros((4,4))
     
@@ -110,6 +138,10 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
         if(aliceBasis[i] == bobBasis[i]):
             aliceKey.append(alicesMeasurement[i])
             bobKey.append(bobsMeasurement[i])   
+            if(eve_present and eveBasis[i] == bobBasis[i]):
+                eveKey.append(eveMeasurement[i])
+            else:
+                eveKey.append(-1)
         else:
             if(aliceBasis[i] == "X" and bobBasis[i] == "Y"):
                 chsh_counts[0][2*alicesMeasurement[i]+bobsMeasurement[i]] += 1
@@ -120,21 +152,24 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
             elif(aliceBasis[i] == "Z" and bobBasis[i] == "W"):
                 chsh_counts[3][2*alicesMeasurement[i]+bobsMeasurement[i]] += 1
 
-    expectXY = (chsh_counts[0][0] - chsh_counts[0][1] - chsh_counts[0][2] + chsh_counts[0][3])/sum(chsh_counts[0])
-    expectXW = (chsh_counts[1][0] - chsh_counts[1][1] - chsh_counts[1][2] + chsh_counts[1][3])/sum(chsh_counts[1])
-    expectZY = (chsh_counts[2][0] - chsh_counts[2][1] - chsh_counts[2][2] + chsh_counts[2][3])/sum(chsh_counts[2])
-    expectZW = (chsh_counts[3][0] - chsh_counts[3][1] - chsh_counts[3][2] + chsh_counts[3][3])/sum(chsh_counts[3])
+    expectXY = (chsh_counts[0][0] - chsh_counts[0][1] - chsh_counts[0][2] + chsh_counts[0][3])/(sum(chsh_counts[0]) if sum(chsh_counts[0]) else 1)
+    expectXW = (chsh_counts[1][0] - chsh_counts[1][1] - chsh_counts[1][2] + chsh_counts[1][3])/(sum(chsh_counts[1]) if sum(chsh_counts[1]) else 1)
+    expectZY = (chsh_counts[2][0] - chsh_counts[2][1] - chsh_counts[2][2] + chsh_counts[2][3])/(sum(chsh_counts[2]) if sum(chsh_counts[2]) else 1)
+    expectZW = (chsh_counts[3][0] - chsh_counts[3][1] - chsh_counts[3][2] + chsh_counts[3][3])/(sum(chsh_counts[3]) if sum(chsh_counts[3]) else 1)
 
     corr = expectXY - expectXW + expectZY + expectZW
 
     print("CHSH correlation value:", round(corr, 3))
     print("Diff from 2*sqrt(2):", round((2*math.sqrt(2) - corr), 3))
             
-    return aliceKey, bobKey
+    return aliceKey, bobKey, eveKey
 
-aliceKey, bobKey = sync_bases_and_build_keys(aliceBasis, bobBasis)
+aliceKey, bobKey, eveKey = sync_bases_and_build_keys(aliceBasis, bobBasis, evePresent, eveBasis, eveIntercepts)
 
 print(f"Length of key: {len(aliceKey)}")
 print(f"Alice's key: {aliceKey}")
 print(f"Bob's key: {bobKey}")
+
+if(evePresent):
+    print(f"Eve's key: {eveKey}")
 
