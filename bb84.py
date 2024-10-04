@@ -3,6 +3,7 @@ from qiskit_aer import AerSimulator
 from qiskit_aer.noise import NoiseModel, ReadoutError
 from qiskit_aer.noise.errors import depolarizing_error
 import numpy as np
+import random
 
 simulator = AerSimulator()
 
@@ -48,40 +49,48 @@ def quantumSend(aBit, aBase, bBase, use_noise=False):
     else: 
         return simulator.run(t, shots=1, memory=True).result().get_counts(t)
 
-def bb84_protocol(n, use_noise=False):
-    aliceKey = []
-    bobKey = []
-    # Generate the random number strings
-    aliceBinary = np.random.randint(2, size= n)
-    aliceBasis = np.random.randint(2, size= n)
-    bobBasis = np.random.randint(2, size= n)
-
+def bb84_protocol(vObject, use_noise=False):
+    aKey = []
+    bKey = []
     # Key sifting
-    for i in range(n):
-        if(aliceBasis[i] == bobBasis[i]):
-            result = quantumSend(aliceBinary[i], aliceBasis[i], bobBasis[i], use_noise)
-            #print(result)
-            aliceKey.append(int(aliceBinary[i]))
-            bobKey.append(int(list(result.keys())[0][0]))
+    for i in range(vObject.nBits):
+        if(vObject.aBase[i] == vObject.bBase[i]):
+            result = quantumSend(vObject.aBits[i], vObject.aBase[i], vObject.bBase[i], use_noise)
+            aKey.append(int(vObject.aBits[i]))
+            bKey.append(int(list(result.keys())[0][0]))
+    return aKey, bKey
 
-    return aliceKey, bobKey
+def spot_checking(aKey, bKey, numberOfBits):
+    nErrors = 0
+    # test
+    aSample = []
+    bSample = []
+    # Gather a sample
+    checkIndex = random.sample(aKey, numberOfBits)
+    # Remove sample 
+    for index in sorted(checkIndex, reverse=True):
+        if aKey[index] != bKey[index]: 
+            nErrors += 1
+        aSample.append(aKey[index])
+        bSample.append(bKey[index])
+        del aKey[index]
+        del bKey[index]
+    return nErrors / len(checkIndex), aSample, bSample
 
-def spot_checking(aliceKey, bobKey, numberOfBits):
-    checkIndex = np.random.randint(len(aliceKey), size=numberOfBits)
-    totalErrors = sum(aliceKey[index] != bobKey[index] for index in checkIndex)
-    return totalErrors / numberOfBits
 
-if __name__ == "__main__":
-   # Main execution
-    numberOfBits = 32
-    
+def main(vObject, use_noise=False):
     # Call protocol
-    (aliceKey, bobKey) = bb84_protocol(numberOfBits, True)
 
-    # Spot check
-    error = spot_checking(aliceKey, bobKey, int(numberOfBits/2))
-
-    print(f"Alice's key: {aliceKey}")
-    print(f"Bob's key  : {bobKey}")
-    print(f"Error: {error}")
+    (aKey, bKey) = bb84_protocol(vObject, use_noise)
     
+    # Spot check
+    (error, aSample, bSample) = spot_checking(aKey, bKey, int(len(aKey)/vObject.sampleDivisor))
+
+    # Output data
+    print(f"Alice's key: {aKey}")
+    print(f"Bob's key  : {bKey}")
+    print(f"Number of bits sent: {vObject.nBits}")
+    print(f"Number of bits in key: {len(aKey)}")
+    print(f"Error rate: {error}")
+    print(f"Alice's sample: {aSample}")
+    print(f"Bob's sample: {bSample}")

@@ -1,26 +1,41 @@
-from qiskit import QuantumCircuit, transpile
-from qiskit_aer import AerSimulator
-from qiskit_aer.noise import NoiseModel, ReadoutError
-from qiskit_aer.noise.errors import depolarizing_error
 import numpy as np
-
 import unittest
 import bb84_eaves
+import bb84
 
-class test(unittest.TestCase):
-    # Example: 
-    nBits = 16
-    spotSample = int(nBits / 4)
-    
+class defineVaribles():
+    # Defining variables
+    nBits = 32
+    sampleDivisor = 8
+
+    # Generate the random number strings
+    aBits = np.random.randint(2, size= nBits)
+    aBase = np.random.randint(2, size= nBits)
+    bBase = np.random.randint(2, size= nBits)
+    # Eavesdropper
+    eBase = np.random.randint(2, size= nBits)
+
+class test(unittest.TestCase, defineVaribles):
+
+#Case 1 (bb84 without noise and eavesdropping)
     def test01(self):
-        print("--test1--")
-        bb84_eaves.main(self.nBits, self.spotSample, 0.15, False)
+        print("\n" + "Case 1 (bb84: Wo[Noise, Eavesdropping]")
+        bb84.main(defineVaribles, False)
+
+#Case 2 (bb84 with noise, but without eavesdropping)
     def test02(self):
-        print("--test2--")
-        bb84_eaves.main(self.nBits, self.spotSample, 0.45, False)
+        print("\n" + "Case 2 (bb84: W[Noise] Wo[Eavesdropping]")
+        bb84.main(defineVaribles, True)
+
+#Case 3 (bb84 with no noise, but with eavesdropping)
     def test03(self):
-        print("--test3--")
-        bb84_eaves.main(self.nBits, self.spotSample, 0.75, False)
+        print("\n" + "Case 3 (bb84: W[Eavesdropping] Wo[Noise]")
+        bb84_eaves.main(defineVaribles, 0.5, False)
+
+    # Case 4 (bb84 with noise and eavesdropping)
+    def test04(self):
+        print("\n" + "Case 4 (bb84: W[Noise, Eavesdropping]")
+        bb84_eaves.main(defineVaribles, 0.5, True)
 
 if __name__ == '__main__':
     unittest.main()
