@@ -2,6 +2,8 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 import numpy as np
 import random
+from qiskit_aer.noise import NoiseModel, ReadoutError
+from qiskit_aer.noise.errors import depolarizing_error
 
 simulator = AerSimulator()
 
@@ -10,6 +12,18 @@ n = 1024
 
 aliceBasis = [] 
 bobBasis = []
+
+def noise_protocol():
+    noise_model = NoiseModel()
+    # Gate error
+    error = depolarizing_error(0.01, 1)
+    noise_model.add_all_qubit_quantum_error(error, ['x', 'h'])
+    
+    # Measurement error (5%)
+    read_error = ReadoutError([[0.95, 0.05], [0.05, 0.95]])
+    noise_model.add_all_qubit_readout_error(read_error)
+
+    return noise_model
 
 # Bases for Alice and Bob
 for i in range(n):
@@ -61,7 +75,7 @@ def send_qubit(alice_base, bobs_base):
 
     t_bell = transpile(bell, simulator)
 
-    return simulator.run(t_bell, shots=1, memory=True).result().get_memory(t_bell)[0]
+    return simulator.run(t_bell, shots=1, memory=True, noise_model = noise_protocol()).result().get_memory(t_bell)[0]
 
 
 def measure_all_qubits(aliceBasis, bobBasis):
@@ -81,10 +95,8 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
     alicesMeasurement, bobsMeasurement = measure_all_qubits(aliceBasis, bobBasis)
 
     print("Alice's bases: X, Y, Z")
-    print("Alice's measurements: ", aliceBasis)
 
     print("Bob's bases: Y, Z, W")
-    print("Bob's measurements: ", bobBasis)
 
     aliceKey = []
     bobKey = []
@@ -114,12 +126,13 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis):
 
     corr = expectXY - expectXW + expectZX + expectZW
 
-    print(round(corr, 3))
+    print("CHSH correlation value: ", round(corr, 3))
             
     return aliceKey, bobKey
 
 aliceKey, bobKey = sync_bases_and_build_keys(aliceBasis, bobBasis)
 
-print("Length of key: ", len(aliceKey))
-print("Alice's key:", aliceKey)
-print("Bob's key:", bobKey)
+print(f"Length of key: {len(aliceKey)}")
+print(f"Alice's key: {aliceKey}")
+print(f"Bob's key: {bobKey}")
+
