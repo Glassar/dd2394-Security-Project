@@ -71,15 +71,17 @@ def spot_checking(aliceKey, bobKey, numberOfBits):
     totalErrors = sum(aliceKey[index] != bobKey[index] for index in checkIndex)
     return totalErrors / numberOfBits
 
-# Main execution
-numberOfBits = 32
+if __name__ == "__main__":
+   # Main execution
+    numberOfBits = 32
+    
+    # Call protocol
+    (aliceKey, bobKey) = bb84_protocol(numberOfBits, True)
 
-# Call protocol
-(aliceKey, bobKey) = bb84_protocol(numberOfBits, True)
+    # Spot check
+    error = spot_checking(aliceKey, bobKey, int(numberOfBits/2))
 
-# Spot check
-error = spot_checking(aliceKey, bobKey, int(numberOfBits/2))
-
-print(f"Alice key: {aliceKey}")
-print(f"Bob key  : {bobKey}")
-print(f"Error: {error}")
+    print(f"Alice's key: {aliceKey}")
+    print(f"Bob's key  : {bobKey}")
+    print(f"Error: {error}")
+    
