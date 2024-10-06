@@ -59,5 +59,8 @@ As mentioned previously, I worked on the BB84 protocol. But to be more specific,
 ### Thi Huyen Trang Nguyen
 
 ### Alex Shariat Zadeh
+- **Key reconciliation in the BB84 protocol**: IMplemented method that makes the keys held by Alice and Bob match since its uncertain if the keys are identical because of the noise or eavesdropping, reconciles the two keys to be the same, by comparing segments of their respective keys and correcting any differences.
+- **Privacy amplification**: Implemented using hash function to safeguard from potential eavesdropping
+- **Test cases**: Implemented test cases for above
 
 ### Jonatan Tuvstedt
