@@ -40,7 +40,7 @@
 - `pip install qiskit_aer`
 
 #### BB84 
-- Execute the test file 'bb84_test.py' with 'python3 bb84_test.py'
+- Execute the test file `bb84_test.py` with `python3 bb84_test.py`
 
 #### E91
 
