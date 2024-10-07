@@ -1,23 +1,10 @@
 from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
-from qiskit_aer.noise import NoiseModel, ReadoutError
-from qiskit_aer.noise.errors import depolarizing_error
-import numpy as np
-import random
+from noise import noise_protocol
+from spot_checking import spot_checking
+
 
 simulator = AerSimulator()
-
-def noise_protocol():
-    noise_model = NoiseModel()
-    # Gate error
-    error = depolarizing_error(0.05, 1)
-    noise_model.add_all_qubit_quantum_error(error, ['x', 'h'])
-    
-    # Measurement error
-    read_error = ReadoutError([[0.9, 0.1], [0.1, 0.9]])
-    noise_model.add_all_qubit_readout_error(read_error)
-
-    return noise_model
 
 def quantumSend(aBit, aBase, bBase, use_noise=False):
     # Create a circuit with 1 qubit
@@ -59,24 +46,6 @@ def bb84_protocol(vObject, use_noise=False):
             aKey.append(int(vObject.aBits[i]))
             bKey.append(int(list(result.keys())[0][0]))
     return aKey, bKey
-
-def spot_checking(aKey, bKey, numberOfBits):
-    nErrors = 0
-    # test
-    aSample = []
-    bSample = []
-    # Gather a sample
-    checkIndex = random.sample(aKey, numberOfBits)
-    # Remove sample 
-    for index in sorted(checkIndex, reverse=True):
-        if aKey[index] != bKey[index]: 
-            nErrors += 1
-        aSample.append(aKey[index])
-        bSample.append(bKey[index])
-        del aKey[index]
-        del bKey[index]
-    return nErrors / len(checkIndex), aSample, bSample
-
 
 def main(vObject, use_noise=False):
     # Call protocol
