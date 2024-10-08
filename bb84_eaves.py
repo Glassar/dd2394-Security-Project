@@ -90,7 +90,9 @@ def error_correction(aKey, bKey):
 
 def privacy_amplification(key):
     # hash
-    hashKey = hashlib.sha256(''.join(map(str, key)).encode()).digest()
+    seed = ''.join(map(str, key))
+    hash_object = hashlib.sha256(seed.encode())
+    hashkey = hash_object.digest()
     binKey = bin(int.from_bytes(hashKey, 'little'))[2:]
     return [int(bit) for bit in str(binKey)]
 
