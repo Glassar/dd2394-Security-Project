@@ -28,6 +28,26 @@ But because this process require us to send information over an insecure connect
 
 ### Crash course in quantum computing
 
+While quantum computing sounds like an intimidating topic, the concepts which we have used for this project are relatively simple.
+
+Quantum computing works by applying quantum gates to a system of qubits and then evaluating the values of these qubits. Qubits are the quantum equivalent of a classical bit and can be represented as a two dimensional complex vector where the absolute values of the two complex numbers represents the probability of finding a 0 and a 1 respectively when measuring on the qubit.
+
+For our protocols we only use a few different quantum gates:
+- H gates simplified puts a qubit into a superposition with equal probability to measure 1 and 0. Or if it is already in one then it returns it to its classical state.
+- X gate is a simpel not gate, switching the to numbers in the vector
+- S and T gates rotates the complex vector in a way which doesn't directly affect the probability of measuring 0 or 1.
+- CX gate is a conditional not gate, which switches the first qubit if and only if the second qubit evaluates to 1 (but if the second qubit only has a certain probability of evaluating to one then it only switches the first one with a certain probability).
+
+#### Bell circuit
+Finally for our protocols we need to introduce the bell circuit. It is a very simple two qubit system which will evaluate with equal odds to either 00 or 11, but never 10 or 01 (if we ignore noise). And it looks like this:
+
+![alt text](image.png)
+
+Basically what we do here is first use a H gate on qubit zero to put it into a superposition with equal likelihoods to evaluate to either 0 or 1. And then we apply a CX gate to both of them so that if qubit zero evaluates to 1 then we will set qubit one to 1. And this will hold even if we separate qubit zero and one by for example sending one to Alice and one to Bob, meaning they now have a shared secret bit.
+
+### BB84 
+The BB84 protocol was devised by Charles H. Bennett and Gilles Brassard in 1984. It utilises a single qubit 
+
 ### Deliverables
 
 #### BB84
