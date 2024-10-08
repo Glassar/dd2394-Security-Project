@@ -3,7 +3,7 @@
 - Jonatan Tuvstedt
 - Thi Huyen Trang Nguyen
 - Anton Brömster
-- Alex Shariat Zadehs
+- Alex Shariat Zadeh
 
 ## Problem statement
 
