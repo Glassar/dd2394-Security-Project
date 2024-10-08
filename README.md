@@ -61,7 +61,11 @@ For each bit Alice will first encode it to the qubit, and then based on her base
 Finally Alice and Bob share their randomly generated bases, and discard any bits where they had different bases, and they now have two identical keys.
 
 ### E91
+The E91 protocol was created by Artur Ekert in 1991 and is slightly more complex than BB84. It instead works based on a bell circuit which creates two qubits, one of which is sent to Alice and one to Bob. They both still generate a random series of bases (one for each bit sent), but now they choose between three bases which are different rotations of the qubits. For our example they only have two angles of the three in common, but they could theoretically chose these bases randomly out of a selection. 
 
+For each bit both Alice and Bob now apply their base to the qubit they received before measuring it. Alice then flips her bit as if they have the same base then Alice's bit is guaranteed to be the opposite of Bob's (disregarding noise), while if they have different bases then their measurement's are a bit random.
+
+Finally Alice and Bobs share their lists of bases and discard any bits where they don't share a base, and they now have two identical keys.
 
 ### Deliverables
 
