@@ -92,7 +92,7 @@ def privacy_amplification(key):
     # hash
     seed = ''.join(map(str, key))
     hash_object = hashlib.sha256(seed.encode())
-    hashkey = hash_object.digest()
+    hashKey = hash_object.digest()
     binKey = bin(int.from_bytes(hashKey, 'little'))[2:]
     return [int(bit) for bit in str(binKey)]
 
