@@ -1,4 +1,9 @@
-# dd2394-Security-Project (Quantum cryptography)
+# Quantum key distribution
+### DD2394-Security-Project - Group 8
+- Jonatan Tuvstedt
+- Thi Huyen Trang Nguyen
+- Anton Brömster
+- Alex Shariat Zadehs
 
 ## Problem statement
 
@@ -45,8 +50,18 @@ Finally for our protocols we need to introduce the bell circuit. It is a very si
 
 Basically what we do here is first use a H gate on qubit zero to put it into a superposition with equal likelihoods to evaluate to either 0 or 1. And then we apply a CX gate to both of them so that if qubit zero evaluates to 1 then we will set qubit one to 1. And this will hold even if we separate qubit zero and one by for example sending one to Alice and one to Bob, meaning they now have a shared secret bit.
 
+### The assumptions of the project
+The quantum protocols we use in this project require the following of our communication: The actual quantum communication is done over a completely open and unsecure channel. And the later comparison of bases as well as key reconciliation is done over an open but **authenticated** classical channel.
+
 ### BB84 
-The BB84 protocol was devised by Charles H. Bennett and Gilles Brassard in 1984. It utilises a single qubit 
+The BB84 protocol was devised by Charles H. Bennett and Gilles Brassard in 1984. It utilises a single qubit system, and works by first having both Alice and Bob randomly generating a series of bases (either no gate or a H gate), as well a Alice randomly generating a bit string. 
+
+For each bit Alice will first encode it to the qubit, and then based on her base for that bit either apply a H gate or not. Bob then also either apply a H gate or not to the same qubit based on his base for that bit, before finally measuring its value. If both of them used the same base (either no H gate or two H gates where applies) then Bob will with a 100% certainty measure the same value as Alice wrote (disregarding noise). However if they have different bases then what Bob measures will be completely random. 
+
+Finally Alice and Bob share their randomly generated bases, and discard any bits where they had different bases, and they now have two identical keys.
+
+### E91
+
 
 ### Deliverables
 
