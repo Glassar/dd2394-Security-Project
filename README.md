@@ -1,7 +1,32 @@
 # dd2394-Security-Project (Quantum cryptography)
 
 ## Problem statement
- - Implement a quantum key sharing protocols (BB84 and E91) in Qiskit, a python quantum programming library. The implementation will be executed by running quantum circuits on a simulator(QiskitAer)
+
+Quantum mechanics and quantum computing offers a new way of distributing keys for cryptography which is physically impossible to eavesdrop on without us knowing. This is because in quantum mechanics measuring a state changes said state. This means that if someone has measured our state before we get it, it will not be in the same state as when it was sent.
+
+Using this quality multiple protocols have been created to distribute a secret key over an open insecure line, where the users will be able to physically guarantee that no one knows the key.
+
+### Protocols
+We have chosen to implement two different quantum key distribution protocols, namely the BB84 and E91 protocols. We will do this using the Qiskit python quantum programming library and run our quantum circuits on the quantum computing simulator QiskitAer.
+
+### Interference tests
+In addition to implementing the basic key distribution protocols we have also implement eavesdropping detection tests for both protocols. These use statistical methods to detect if the results of our two parties deviate from what would be expected if no interference was present.
+
+This interference comes both in the form of noise, due to the fact that quantum computers are not infallible and sometimes a gate or measurement returns the wrong value. Or from someone eavesdropping on the key distribution and thereby modifying the states being sent.
+
+If the detection protocol returns an interference larger than our safety threshold then we conclude that there has been eavesdropping and discard our results.
+
+### Eavesdropping
+Eavesdropping was implemented for both protocols with Eve intercepting some of the transmissions and measuring them. But then also making sure something is sent on for Bob to measure. But because there are random factors in how the information was sent which is not detectable in any way Eve can't do this perfectly meaning that there will be interference which we can detect. 
+
+### Key reconciliation and privacy amplification
+Finally because the quantum process is noise, Alice's and Bob's keys likely won't be completely identical even if there is no eavesdropping. To reconcile their keys an error correction protocol is used called *cascade protocol* which reveals minimal information while with high likelihood letting us reconcile the two keys.
+
+But because this process require us to send information over an insecure connection we will finish of the key distribution with privacy amplification. This lets us effectively eliminate any knowledge about the key Eve might have gleaned through either eavesdropping on the key distribution, or from our key reconciliation. And this is done with a simpel hashing function.
+
+## Background
+
+### Crash course in quantum computing
 
 ### Deliverables
 
