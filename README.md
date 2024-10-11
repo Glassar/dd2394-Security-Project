@@ -124,14 +124,14 @@ The key reconciliation and privacy amplification, are crucial steps in quantum k
 > 2. Applies privacy_amplification to the corrected key.
 
 - **cascade_error_correction**: Implements cascade protocol
-1. Iterates through multiple rounds, doubling the block size each round.
-2. For each block, compares parities and uses binary search to locate and correct errors.
-3. Corrects errors in previous rounds when a new error is found.
+> 1. Iterates through multiple rounds, doubling the block size each round.
+> 2. For each block, compares parities and uses binary search to locate and correct errors.
+> 3. Corrects errors in previous rounds when a new error is found.
 
 - **privacy_amplification**: Hash function for reconciled key.
-1. Converts key to a string using it as a seed.
-2. Applies the SHA-256 hash to produce a new key
-3. Converts the hash to binary string and returns it.
+> 1. Converts key to a string using it as a seed.
+> 2. Applies the SHA-256 hash to produce a new key
+> 3. Converts the hash to binary string and returns it.
 
 -Helper functions:
 1. **parity(block)**: Calculates the parity of bits in a block. (count of bits in a block with value 1 is even, the parity bit value is set to 1 making the total count of 1s in the whole set (including the parity bit) an odd number. If the count of bits with a value of 1 is odd, the count is already odd so the parity bit's value is 0).
