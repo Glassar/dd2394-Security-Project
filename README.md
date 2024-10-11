@@ -115,9 +115,30 @@ Describe the content of the repo (vilka filer har vi + vad gör dem + hur körs 
 The key reconciliation and privacy amplification, are crucial steps in quantum key distribution (QKD) protocols, they help ensure that two parties can established a secret key over a insecure channel.
 
 #### Components
-- Key Reconciliation: This process corrects errors in the raw keys shared between Alice and Bob. It uses the Cascade protocol, an iterative error correction method.
-- Privacy Amplification: This step increases the security of the reconciled key by reducing any potential information an eavesdropper might have gained.
+- Key Reconciliation: Corrects errors in the keys shared between Alice and Bob. It uses the Cascade protocol, an iterative error correction method.
+- Privacy Amplification: Increases the security of the reconciled key by reducing any potential information an eavesdropper might have gained by hashing the keys.
 
+#### Main Functions
+- key_reconciliation: Main funciton behind the process
+1. It calls cascade_error_correction to fix errors in Bob key.
+2. Applies privacy_amplification to the corrected key.
+
+- cascade_error_correction: Implements cascade protocol
+1. Iterates through multiple rounds, doubling the block size each round.
+2. For each block, compares parities and uses binary search to locate and correct errors.
+3. Corrects errors in previous rounds when a new error is found.
+
+- privacy_amplification: Hash function for reconciled key.
+1. Converts key to a string using it as a seed.
+2. Applies the SHA-256 hash to produce a new key
+3. Converts the hash to binary string and returns it.
+
+-Helper functions:
+1. parity(block): Calculates the parity of bits in a block. (count of bits in a block with value 1 is even, the parity bit value is set to 1 making the total count of 1s in the whole set (including the parity bit) an odd number. If the count of bits with a value of 1 is odd, the count is already odd so the parity bit's value is 0).
+2. binary_search_error(alice_block, bob_block): Locates an error within a block using binary search.
+3. cascade_to_previous_blocks(alice_key, bob_key, error_index, min_block_size): Implements the cascade effect, correcting errors in previous rounds.
+
+To summarize: It takes Alice and Bobs keys and run them through the key reconciliation function and use the final key for secure communication.
 
 ## Documentation of testing the project
 
@@ -147,7 +168,7 @@ As mentioned previously, I worked on the BB84 protocol. But to be more specific,
 
 ### Alex Shariat Zadeh
 - **Key reconciliation in the BB84 and E91 protocol**: Implemented method that makes keys match since its uncertain if the keys are identical due to the noise or eavesdropping, reconciles the two keys to be the same, by comparing segments of their respective keys and correcting differences while revealing minimal information.
-- **Privacy amplification in BB84 and E91**: Implemented using hash function to safeguard from potential eavesdropping
+- **Privacy amplification in BB84 and E91**: Implemented using hash function to hash keys in order to safeguard them from potential eavesdropping.
 - **Test cases**: Implemented test cases for above
 - **Documentation**:
 ### Jonatan Tuvstedt
