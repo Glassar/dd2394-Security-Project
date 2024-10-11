@@ -108,6 +108,57 @@ Describe the content of the repo (vilka filer har vi + vad gör dem + hur körs 
 ## Documentation of the project
 
 ### BB84
+The BB84 QKD protocol with simulated eavesdropping, noise model and spot checking. Uses Qiskit for quantum circuit simulation.
+
+#### Components
+- **BB84 protocol**
+- **Noise model**
+- **Spot checking**
+
+#### bb84_protocol
+- **bb84_protocol(vObject, use_noise=False)**: Implements the BB84 protocol
+> 1. Iterates through bits
+> 2. Performs key sifting (keeps bits where Alice and Bob's bases match)
+> 3. Returns Alice and Bob's sifted keys
+
+- **quantumEavesDropping(aBit, aBase, eBase, use_noise=False)**: Simulates eavesdropping
+> 1. Creates a quantum circuit based on Alice's bit and basis
+> 2. Applies Eve's basis
+> 3. Measures the qubit
+> 4. Noise optional
+
+- **quantumSend(aBit, aBase, bBase, eBase, use_noise=False)**: Simulates the quantum transmission
+> 1. Performs eavesdropping
+> 2. Resets the circuit
+> 3. Applies Bob's basis
+> 4. Measures the qubit
+
+- **calc_risk(rate, threshold)**:
+> 1. Calculates the risk of eavesdropping based on the error rate and a given threshold.
+
+- **main(vObject, threshold, use_noise=False)**: Main function
+> 1. Runs the BB84 protocol
+> 2. Performs spot checking
+> 3. Calculates eavesdropping risk
+> 4. Applies key reconciliation
+
+#### Noise model
+- **noise_protocol()**: Noise model for the quantum simulation
+> 1. Adds a depolarizing error (5% probability) to X and H gates
+> 2. Adds a readout error (5% probability of flipping the measurement result)
+
+#### Spot checking
+- **spot_checking(aKey, bKey, numberOfBits)**: Spot checking to estimate the error rate
+> 1. Randomly selects a sample of bits from the keys
+> 2. Compares the selected bits between Alice and Bob's keys
+> 3. Calculates the error rate
+> 4. Returns the error rate and the samples from both keys
+
+#### Features
+**Eavesdropping simulation**: The implementation includes a simulation of an eavesdropper (Eve) attempting to intercept the quantum communication.
+**Noise modeling**: Optional noise can be applied to simulate real-world hinderance in QKD.
+**Spot checking**: A portion of the sifted key is sacrificed to estimate the error rate and detect potential eavesdropping.
+**Risk calculation**: The implementation calculates the risk of eavesdropping based on the observed error rate.
 
 ### E91
 
@@ -170,5 +221,5 @@ As mentioned previously, I worked on the BB84 protocol. But to be more specific,
 - **Key reconciliation in the BB84 and E91 protocol**: Implemented method that makes keys match since its uncertain if the keys are identical due to the noise or eavesdropping, reconciles the two keys to be the same, by comparing segments of their respective keys and correcting differences while revealing minimal information.
 - **Privacy amplification in BB84 and E91**: Implemented using hash function to hash keys in order to safeguard them from potential eavesdropping.
 - **Test cases**: Implemented test cases for above
-- **Documentation**:
+- **Documentation**: Wrote documentation about BB84 protocol and Key reconciliation and Privacy amplification
 ### Jonatan Tuvstedt
