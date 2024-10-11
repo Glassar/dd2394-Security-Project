@@ -111,6 +111,14 @@ Describe the content of the repo (vilka filer har vi + vad gör dem + hur körs 
 
 ### E91
 
+### Key reconciliation and privacy amplification
+The key reconciliation and privacy amplification, are crucial steps in quantum key distribution (QKD) protocols, they help ensure that two parties can established a secret key over a insecure channel.
+
+#### Components
+- Key Reconciliation: This process corrects errors in the raw keys shared between Alice and Bob. It uses the Cascade protocol, an iterative error correction method.
+- Privacy Amplification: This step increases the security of the reconciled key by reducing any potential information an eavesdropper might have gained.
+
+
 ## Documentation of testing the project
 
 ### Dependencies:
