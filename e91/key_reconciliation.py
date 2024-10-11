@@ -6,7 +6,8 @@ import random as rand
 def key_reconciliation(alice_key, bob_key, block_size=1, rounds=4):
     fixed_key = cascade_error_correction(alice_key, bob_key, block_size, rounds)
     final_key = privacy_amplification(fixed_key)
-    return fixed_key, final_key
+    new_alice_key = privacy_amplification(alice_key)
+    return fixed_key, final_key, new_alice_key
 
 def cascade_error_correction(alice_key, bob_key, initial_block_size=1, rounds=4):
     key_length = len(alice_key)
@@ -55,7 +56,7 @@ def cascade_to_previous_blocks(alice_key, bob_key, error_index, min_block_size):
 def privacy_amplification(key):
     # hash
     seed = ''.join(map(str, key))
-    hash_object = hashlib.sha256(seed.encode())
+    hash_object = hashlib.md5(seed.encode())
     hashKey = hash_object.digest()
     binKey = bin(int.from_bytes(hashKey, 'little'))[2:]
     return [int(bit) for bit in str(binKey)]

@@ -6,10 +6,12 @@ from qiskit_aer.noise import NoiseModel, ReadoutError
 from qiskit_aer.noise.errors import depolarizing_error
 import math
 
+import key_reconciliation
+
 simulator = AerSimulator()
 
 # Number of qubits
-n = 32
+n = 1024
 
 useNoise = False
 evePresent = True
@@ -129,6 +131,9 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis, eve_present = False, eveBasi
     
     print("Alice's bases: X, Y, Z")
     print("Bob's bases: Y, Z, W")
+
+    if(eve_present):
+        print("Eve's bases: Y, Z")
     
     aliceKey = []
     bobKey = []
@@ -179,8 +184,17 @@ def sync_bases_and_build_keys(aliceBasis, bobBasis, eve_present = False, eveBasi
         
     return aliceKey, bobKey, eveKey
 
-sync_bases_and_build_keys(aliceBasis, bobBasis, evePresent, eveBasis, eveIntercepts)
+aliceKey, bobKey, eveKey = sync_bases_and_build_keys(aliceBasis, bobBasis, evePresent, eveBasis, eveIntercepts)
 
-    
+fixedBobKey, newBobKey, newAliceKey = key_reconciliation.key_reconciliation(aliceKey, bobKey)
 
+print(fixedBobKey)
+misMatchedBits = 0
+if (evePresent):
+    for i in range(len(aliceKey)):
+        if (aliceKey[i] != fixedBobKey[i]):
+            misMatchedBits += 1
 
+    print(f"Mismatched bits: {misMatchedBits}")
+
+print(f"Shared key: {newBobKey}")
