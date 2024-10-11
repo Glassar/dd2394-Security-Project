@@ -133,7 +133,7 @@ The key reconciliation and privacy amplification, are crucial steps in quantum k
 > 2. Applies the SHA-256 hash to produce a new key
 > 3. Converts the hash to binary string and returns it.
 
--Helper functions:
+-**Helper functions**:
 1. **parity(block)**: Calculates the parity of bits in a block. (count of bits in a block with value 1 is even, the parity bit value is set to 1 making the total count of 1s in the whole set (including the parity bit) an odd number. If the count of bits with a value of 1 is odd, the count is already odd so the parity bit's value is 0).
 2. **binary_search_error(alice_block, bob_block)**: Locates an error within a block using binary search.
 3. **cascade_to_previous_blocks(alice_key, bob_key, error_index, min_block_size)**: Implements the cascade effect, correcting errors in previous rounds.
