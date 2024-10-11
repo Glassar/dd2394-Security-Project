@@ -71,10 +71,11 @@ Finally Alice and Bobs share their lists of bases and discard any bits where the
 The repository contains two protocols - BB84 and E91. The code for each protocol can be located within their corresponding folder [bb84](/bb84) and [e91](/e91). 
 
 #### BB84
-
-
+Within the [bb84](/bb84) folder, there are five python scripts - `bb84.py, bb84_eaves.py, bb84_test.py, noise.py, and spot_checking.py`. 
 
 #### E91
+Within the [e91](/e91) folder, one should find one python script - `e91.py`.
+
 
 Describe the content of the repo (vilka filer har vi + vad gör dem + hur körs dem?) and how to navigate it (basically rewrite deliverables) - Anton
  - So what files do we have and what do they do
