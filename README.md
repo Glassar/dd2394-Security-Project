@@ -115,17 +115,17 @@ The BB84 QKD protocol with simulated eavesdropping, noise model and spot checkin
 - **Noise model**
 - **Spot checking**
 
-#### bb84_protocol
+#### BB84_protocol
 - **bb84_protocol(vObject, use_noise=False)**: Implements the BB84 protocol
-* 1. Iterates through bits
-* 2. Performs key sifting (keeps bits where Alice and Bob's bases match)
-* 3. Returns Alice and Bob's sifted keys
+> 1. Iterates through bits
+> 2. Performs key sifting (keeps bits where Alice and Bob's bases match)
+> 3. Returns Alice and Bob's sifted keys
 
 - **quantumEavesDropping(aBit, aBase, eBase, use_noise=False)**: Simulates eavesdropping*
-* 1. Creates a quantum circuit based on Alice's bit and basis
-* 2. Applies Eve's basis
-* 3. Measures the qubit
-* 4. Noise optional
+> 1. Creates a quantum circuit based on Alice's bit and basis
+> 2. Applies Eve's basis
+> 3. Measures the qubit
+> 4. Noise optional
 
 - **quantumSend(aBit, aBase, bBase, eBase, use_noise=False)**: Simulates the quantum transmission
 > 1. Performs eavesdropping
