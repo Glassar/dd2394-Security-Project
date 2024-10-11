@@ -89,6 +89,9 @@ Finally Alice and Bobs share their lists of bases and discard any bits where the
 - [Qiskit tutorial - BB84 (2018)](https://github.com/qiskit-community/qiskit-community-tutorials/blob/master/awards/teach_me_qiskit_2018/quantum_cryptography_qkd/Quantum_Cryptography2.ipynb)
 - [Qiskit tutorial - E91 (2018)](https://github.com/qiskit-community/qiskit-community-tutorials/blob/master/awards/teach_me_qiskit_2018/e91_qkd/e91_quantum_key_distribution_protocol.ipynb)
 - [Qiskit noise](https://qiskit.github.io/qiskit-aer/tutorials/3_building_noise_models.html)
+- [Cascade protocol](https://cascade-python.readthedocs.io/en/latest/protocol.html)
+- [Quantum key distribution (Wikipedia)](https://en.wikipedia.org/wiki/Quantum_key_distribution#Information_reconciliation_and_privacy_amplification)
+- [Quantum documentation (IBM)](https://docs.quantum.ibm.com/)
 
 ## Documentation of the project
 
