@@ -68,7 +68,13 @@ For each bit both Alice and Bob now apply their base to the qubit they received 
 Finally Alice and Bobs share their lists of bases and discard any bits where they don't share a base, and they now have two identical keys.
 
 ### Deliverables
-The repository contains two protocols - BB84 and E91. The code for each protocol can be located within their corresponding folder ([bb84](/bb84) and [e91](/e91).
+The repository contains two protocols - BB84 and E91. The code for each protocol can be located within their corresponding folder [bb84](/bb84) and [e91](/e91). 
+
+#### BB84
+
+
+
+#### E91
 
 Describe the content of the repo (vilka filer har vi + vad gör dem + hur körs dem?) and how to navigate it (basically rewrite deliverables) - Anton
  - So what files do we have and what do they do
