@@ -117,15 +117,15 @@ The BB84 QKD protocol with simulated eavesdropping, noise model and spot checkin
 
 #### bb84_protocol
 - **bb84_protocol(vObject, use_noise=False)**: Implements the BB84 protocol
-> 1. Iterates through bits
-> 2. Performs key sifting (keeps bits where Alice and Bob's bases match)
-> 3. Returns Alice and Bob's sifted keys
+* 1. Iterates through bits
+* 2. Performs key sifting (keeps bits where Alice and Bob's bases match)
+* 3. Returns Alice and Bob's sifted keys
 
-- **quantumEavesDropping(aBit, aBase, eBase, use_noise=False)**: Simulates eavesdropping
-> 1. Creates a quantum circuit based on Alice's bit and basis
-> 2. Applies Eve's basis
-> 3. Measures the qubit
-> 4. Noise optional
+- **quantumEavesDropping(aBit, aBase, eBase, use_noise=False)**: Simulates eavesdropping*
+* 1. Creates a quantum circuit based on Alice's bit and basis
+* 2. Applies Eve's basis
+* 3. Measures the qubit
+* 4. Noise optional
 
 - **quantumSend(aBit, aBase, bBase, eBase, use_noise=False)**: Simulates the quantum transmission
 > 1. Performs eavesdropping
@@ -155,10 +155,10 @@ The BB84 QKD protocol with simulated eavesdropping, noise model and spot checkin
 > 4. Returns the error rate and the samples from both keys
 
 #### Features
-**Eavesdropping simulation**: The implementation includes a simulation of an eavesdropper (Eve) attempting to intercept the quantum communication.
-**Noise modeling**: Optional noise can be applied to simulate real-world hinderance in QKD.
-**Spot checking**: A portion of the sifted key is sacrificed to estimate the error rate and detect potential eavesdropping.
-**Risk calculation**: The implementation calculates the risk of eavesdropping based on the observed error rate.
+- **Eavesdropping simulation**: The implementation includes a simulation of an eavesdropper (Eve) attempting to intercept the quantum communication.
+- **Noise modeling**: Optional noise can be applied to simulate real-world hinderance in QKD.
+- **Spot checking**: A portion of the sifted key is sacrificed to estimate the error rate and detect potential eavesdropping.
+- **Risk calculation**: The implementation calculates the risk of eavesdropping based on the observed error rate.
 
 ### E91
 
