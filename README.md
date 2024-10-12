@@ -37,8 +37,10 @@ Members:
         2. [Components](#components-1)
         3. [Main Functions](#main-functions)
 7. [Documentation of testing the project](#documentation-of-testing-the-project)
-8. [Contribution](#contribution)
-9. [References](#references)
+    1. [BB84](#bb84-4)
+    2. [E91](#e91-4)
+9. [Contribution](#contribution)
+10. [References](#references)
 
 ## Installation
 1. Clone the repository:
