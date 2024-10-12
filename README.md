@@ -114,8 +114,23 @@ Both Alice and Bob measures each bit they recieve using one of the three basis o
 Finally Alice and Bobs share their lists of bases and discard any bits where they don't share a base, and they now have two identical keys.
 
 ## Deliverables
+This repository includes implementations of two quantum key distribution protocols, E91 and BB84. The protocols are implemented in Python, using Qiskit and Qiskit Aer, and simulates the key exchange between two users (Alice and Bob), while also including noise models and eavesdropping. Additionally, the repository includes a key reconciliation technique, used to fix key inconsistensies, and also privacy amplification. The code for each protocol can be located within their corresponding folder [bb84](/bb84) and [e91](/e91). 
 
-Anton kan lägga sin text här
+#### BB84
+Within the [bb84](/bb84) folder, there are five python scripts: 
+- [bb84.py](/bb84/bb84.py) - This file implements the BB84 protocol, which includes a key exchange between two parties - Alice and Bob. Due to this being the most "basic" version of BB84, it does not include any eavesdropping. However, it can include noise. This can be included when running the main file. Also, to run the `main` function, a variable object is required. An example of such object can be found within the [test-file](/bb84/bb84_test.py) (named `config`).
+- [bb84_eaves.py](/bb84/bb84_eaves.py) - The structure of this file is quite similar to that of `bb84.py`, with the difference being the inclusion of eavesdropping. That being said, the `main` function is ran the same way as `bb84.py`, with the difference being the inclusion of parameter `threshhold`.
+- [bb84_test.py](/bb84/bb84_test.py) - This is the test file, used to try the bb84-protocol. It includes a series of tests, each including different values (i.e. with/without noise and with/without eavesdropping). **To run the test, run command `python3 ./bb84/bb84_test.py` in your terminal**
+- [noise.py](/bb84/noise.py) - The noise file contains the noise protocol. It is defined as a function, called `noise_protocol`, and is used to insert noise into the process of key exchange. 
+- [spot_checking.py](/bb84/spot_checking.py) - The spot checking file includes the function `spot_checking` which calculates the number of incorrect bits out of a random sample of Bob's key. 
+
+[comment]: <> (The sample size is based on parameter `numberOfBits`, and the function will return three values - `error rate, Alice's sample, and Bob's sample`.)
+
+#### E91
+Within the [e91](/e91) folder, one should find one python script, namely [e91.py](/e91/e91.py). Other than key exchange, the file also gives the option to simulate eavesdropper. To run the code, run the `sync_bases_and_build_keys` function. More information about the code will be presented under [Documentation of the project](#documentatiohn-of-the-project).
+
+#### Key reconciliation and privacy amplification
+Aside the two folders for the respective protocols, there exist another folder. This folder, called [key_reconciliation](/key_reconciliation), includes code that relates to key reconciliation and privacy amplification. Within said folder, one should find a file called [key_reconciliation.py](/key_reconciliation/key_reconciliation.py). More information about the code will be presented under [Documentation of the project](#documentatiohn-of-the-project).
 
 ## Documentation of the Project
 ### BB84
