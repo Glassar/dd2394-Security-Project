@@ -4,6 +4,7 @@ from noise import noise_protocol
 from spot_checking import spot_checking
 import hashlib
 import random as rand
+import key_reconciliation
 
 simulator = AerSimulator()
 
@@ -73,28 +74,6 @@ def bb84_protocol(vObject, use_noise=False):
 def calc_risk(rate, threshold):
     return rate / threshold if rate <= threshold else 1
 
-def key_reconciliation(aKey, bKey):
-    fixedKey = error_correction(aKey, bKey)
-    finalKey = privacy_amplification(fixedKey)
-    return fixedKey,finalKey
-
-def error_correction(aKey, bKey):
-    newKey = []
-    for aBit, bBit in zip(aKey, bKey):
-        if aBit != bBit: 
-            newBit = 1 - bBit
-            newKey.append(newBit)
-        else:
-            newKey.append(bBit)
-    return newKey
-
-def privacy_amplification(key):
-    # hash
-    seed = ''.join(map(str, key))
-    hash_object = hashlib.sha256(seed.encode())
-    hashKey = hash_object.digest()
-    binKey = bin(int.from_bytes(hashKey, 'little'))[2:]
-    return [int(bit) for bit in str(binKey)]
 
 def main(vObject, threshold, use_noise=False):
     # Call protocol
@@ -107,7 +86,7 @@ def main(vObject, threshold, use_noise=False):
     risk = calc_risk(error_eve, threshold)
 
     # key_reconciliation
-    fixedKey, hashedKey = key_reconciliation(aKey, bKey)
+    fixedKey, hashedKey = key_reconciliation.key_reconciliation(aKey, bKey)
 
     # Output data
     print(f"Alice's key: {aKey}")
