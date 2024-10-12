@@ -28,7 +28,7 @@ Members:
 6. [Documentation of the Project](#documentation-of-the-project)
     1. [BB84](#bb84-3)
         1. [Components](#components)
-        2. [BB84 Protocol](#protocol)
+        2. [BB84 Protocol](#bb84-protocol-2)
         3. [Noise Model](#noise-model)
         4. [Spot Checking](#spot-checking)
         5. [Features](#features)
