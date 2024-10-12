@@ -1,7 +1,7 @@
 # Quantum key distribution
 ### DD2394-Security-Project - Group 8
 - Jonatan Tuvstedt
-- Thi Huyen Trang Nguyen
+- Trang Nguyen
 - Anton Brömster
 - Alex Shariat Zadeh
 
@@ -120,7 +120,7 @@ As mentioned previously, I worked on the BB84 protocol. But to be more specific,
 - **Test cases**: Implemented test cases for verification of the of the BB84 protocol. This included cases where eavedropping and noise wasn't used, and cases where they were used. 
 - **Documentation**: Drafted the first version of the `README.md` page. This included sections: problem statement, deliverables and references. 
 
-### Thi Huyen Trang Nguyen
+### Trang Nguyen
 
 ### Alex Shariat Zadeh
 - **Key reconciliation in the BB84 protocol**: Implemented method that makes keys match since its uncertain if the keys are identical because of the noise or eavesdropping, reconciles the two keys to be the same, by comparing segments of their respective keys and correcting any differences.
