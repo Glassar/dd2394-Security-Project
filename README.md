@@ -36,8 +36,9 @@ Members:
         1. [Key Reconciliation and Privacy Amplification](#key-reconciliation-and-privacy-amplification-2)
         2. [Components](#components-1)
         3. [Main Functions](#main-functions)
-7. [Contribution](#contribution)
-8. [References](#references)
+7. [Documentation of testing the project](#documentation-of-testing-the-project)
+8. [Contribution](#contribution)
+9. [References](#references)
 
 ## Installation
 1. Clone the repository:
@@ -216,6 +217,27 @@ The key reconciliation and privacy amplification, are crucial steps in quantum k
 3. **cascade_to_previous_blocks(alice_key, bob_key, error_index, min_block_size)**: Implements the cascade effect, correcting errors in previous rounds.
 
 To summarize: It takes Alice and Bobs keys and run them through the key reconciliation function and use the final key for secure communication.
+
+## Documentation of testing the project
+The following section will discuss the testing that we did on the respective protocols, and what result it yielded.
+### BB84 
+The [file](/bb84/bb84_test.py) used for testing contains a total of five different test cases, each with their different values. 
+- Test case 1: The first test case used the `bb84.py` code, and performs a key exchange without noise and eavesdropping. 
+- Test case 2: The second test case also used the `bb84.py` code. However, this time, it includes noise. 
+- Test case 3: The third test, which used the `bb84_eaves.py`, includes eavesdropping (but no noise). 
+- Test case 4: The fourth test is quite similar to test case 3, as it also executes the `bb84_eaves.py` code, but with the difference being that it includes noise,
+- Test case 5: The fifth test case is the same as test case 4, with the difference being the inclusion of key reconciliation. 
+For the execution, the variables within the config was set to the following:
+```py
+nBits = XXX
+sampleDivisor = YYY
+threshold = ZZZ
+```
+By running the respective test cases, XXX
+
+### E91
+
+
 
 ## Contribution
 To improve efficiency, the work was split into two parts based on the two protocols. While Alex and Anton worked on BB84, Jonatan and Trang worked on E91. 
