@@ -226,7 +226,7 @@ The E91 QKD protocol with simulated eavesdropping, noise model and spot checking
 > 1. Executes the E91 protocol with the appropriate parameters. 
 > 2. Outputs the shared key, CHSH correlation value and mismatched bits due to interference. 
 
-#### Key reconciliation and privacy amplification
+### Key reconciliation and privacy amplification
 - `key_reconciliation(alice_key, bob_key, block_size=1, rounds=4)`: Corrects errors in the shared key. 
 > 1. Calls `cascade_error_correction()` to correct errors in Bob's keys.
 > 2. Calls `privacy_amplification()` to the corrected key to reduce any information an eavesdropper might have gained. 
