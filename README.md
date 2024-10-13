@@ -271,7 +271,7 @@ nBits = XXX
 sampleDivisor = YYY
 threshold = ZZZ
 ```
-By running the respective test cases, XXX
+As each test case varies, it allowed us to grasp how the respective variable conditions affect the key exchange. We could observe how a basic bb84 protocol operates, as well as how applying noise and eavesdropping affected the exchange. 
 
 ### E91
 
