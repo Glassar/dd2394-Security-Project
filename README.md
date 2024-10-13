@@ -34,8 +34,8 @@ Members:
         5. [Features](#features)
     2. [E91](#e91-3)
         1. [Components](#components-1)
-        2. [E91 Protocol](#e91-protocol-1)
-        3. [Key reconciliation and privacy amplification](#key-reconciliation-and privacy-amplification-2)
+        2. [E91 Protocol](#e91_protocol)
+        3. [Key Reconciliation and Privacy Amplification](#key-reconciliation-and-privacy-amplification-3)
 7. [Documentation of testing the project](#documentation-of-testing-the-project)
     1. [BB84](#bb84-4)
     2. [E91](#e91-4)
@@ -144,7 +144,7 @@ The BB84 QKD protocol with simulated eavesdropping, noise model and spot checkin
 - **Noise model**
 - **Spot checking**
 
-#### BB84 Protocol 
+#### BB84_protocol 
 - `bb84_protocol(vObject, use_noise=False)`: Implements the BB84 protocol
 > 1. Iterates through bits
 > 2. Performs key sifting (keeps bits where Alice and Bob's bases match)
@@ -199,7 +199,7 @@ The E91 QKD protocol with simulated eavesdropping, noise model and spot checking
 - E91 Protocol
 - Key reconciliation and privacy amplification
 
-#### E91 Protocol (with and without noise and eavesdropping)
+#### E91_protocol
 - `noise_protocol()`: Simulates noise by adding two types of noise.
 > 1. **Depolarization error** - adds a 1% probability of depolarizing error on X and H gates.
 > 2. **Readout error** - adds a readout error with 5% probability of flipping the measurement result.
@@ -299,6 +299,9 @@ As mentioned previously, I worked on the BB84 protocol. But to be more specific,
 
 
 ### Trang Nguyen
+- **Implementation of the E91 protocol**: Implemented the E91 protocol with and without noise by pair-programming with Jonatan by checking the code and giving directions. 
+- **Implementation of eavesdropping and CHSH correlation value**: Implemented eavesdropping and the CHSH correlation value by pair-programming with Jonatan by checking the code and giving directions. 
+- **Documentation**: Structured the report and modified each section for the final iteration. 
 
 ## References
 - [BB84 protocol (1984)](https://github.com/qmunitytech/Tutorials/blob/main/intermediate/The%20BB84%20Quantum%20Cryptography%20algorithm.ipynb)
