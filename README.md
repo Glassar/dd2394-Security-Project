@@ -1,7 +1,7 @@
-# Quantum Key Distribution
+# DD2391 Security Project - Quantum Key Distribution
 The purpose of this project is to implement quantum key distribution (QKD) protocols to securely exchange cryptographic keys. Specifically, the BB84 and E91 protocols were implemented using the Qiskit Python library and quantum simulators to showcase how quantum communication can detect eavesdropping. We simulated noise, eavesdropping and applied methods such as key reconiliation and privacy amplification to enhance security. 
 
-## DD2391 Security Project - Group 8
+## Group 8
 Members:
 - Alex Shariat Zadeh
 - Anton Brömster
@@ -43,11 +43,11 @@ Members:
 10. [References](#references)
 
 ## Installation
-1. Clone the repository:
+1. Clone the repository:<br/>
 ` git clone https://github.com/Glassar/dd2394-Security-Project.git`
 
-2. Install dependencies:
-`pip install qiskit`
+2. Install dependencies: <br/>
+`pip install qiskit`<br/>
 `pip install qiskit_aer`
 
 ## Usage
@@ -74,7 +74,7 @@ Such interference arises either from noise, given that quantum computers are not
 Eavesdropping was integrated into both protocols, with an eavesdropper, referred to as Eve, intercepting and measuring a few of the transmissions while ensuring that some information is forwarded to Bob for measurement. However, due to the randomness in how the information is transmitted, which is undetectable, Eve cannot carry out this process perfectly, meaning that there will be interference which we can detect. 
 
 ### Key Reconciliation and Privacy Amplification
-Due to the inherent noise in quantum processes, errors will inevitably occur resulting in Alice's and Bob's keys not being completely identical, even in the absence of eavesdropping. Therefore, to ensure that the final key is usable, these errors must be removed. To reconcile their keys, we implemented an error correction protocol known as the *cascade protocol* which corrects any remaining errors Bob's key relative to Alice's key while revealing minimal information and maintaining a high probability of successfully reconciling the two keys.
+Key reconciliation and privacy amplification are crucial steps in QKD protocols as they help ensure that two parties can established a secret key over a insecure channel. Due to the inherent noise in quantum processes, errors will inevitably occur resulting in Alice's and Bob's keys not being completely identical, even in the absence of eavesdropping. Therefore, to ensure that the final key is usable, these errors must be removed. To reconcile their keys, we implemented an error correction protocol known as the *cascade protocol* which corrects any remaining errors Bob's key relative to Alice's key while revealing minimal information and maintaining a high probability of successfully reconciling the two keys.
 
 However, since this process requires us to send information over an insecure channel, we conclude the key distribution process with privacy amplification. The concept of privacy amplification exploits the limited knowledge that the eavesdropper, Eve, has of the initial key which may have been acquired through either eavesdropping of the key distribution or the key reconciliation process. Privacy amplification is achieved by performing a simple has function on the key.
 
@@ -105,21 +105,21 @@ We start with two quibits in the |0⟩ state. First, we  apply a Hadamard (H) ga
 The quantum protocols used in this project requires these following communication conditions: the quantum communication is done over a completely open and unsecure channel, and the later comparison of bases as well as key reconciliation is done over an open but **authenticated** classical channel.
 
 ### BB84 
-The BB84 protocol was developed by Charles H. Bennett and Gilles Brassard in 1984 and it utilises a single qubit system. In this protocol, Alice randomly selects a string of bits and a string of one of two bases: either the horizontal/vertical (0/1) or diagional (+45°/-45°) states. She then transmits a photon for each bit with the corresponding polarization to Bob. Bob randomly chooses a basis to measure each bit he recieves. If he chose the same basis as Alice for a particular bit, then Bob will with a 100% certainty measure the same value as Alice wrote (disregarding noise). However if they have different bases then what Bob measures will be completely random. 
+The BB84 protocol was developed by Charles H. Bennett and Gilles Brassard in 1984 and it utilises a single qubit system. In this protocol, Alice randomly selects a string of bits and a string of one of two bases: either the horizontal/vertical (0/1) or diagional (+45°/-45°) states. She then transmits a photon for each bit with the corresponding polarization to Bob. Bob randomly chooses a bases to measure each bit he recieves. If he chose the same bases as Alice for a particular bit, then Bob will with a 100% certainty measure the same value as Alice wrote (disregarding noise). However if they have different bases then what Bob measures will be completely random. 
 
 Finally Alice and Bob share their randomly generated bases, and discard any bits where they had different bases, and the resulting string form their shared secret key. 
 
 ### E91
 The E91 protocol was created by Artur Ekert in 1991 and is slightly more complex than BB84. This method relies on a Bell circuit that generates a pair of entangled qubits—one of which is sent to Alice and the other to Bob. Both Alice and Bob generate a random series of bases (one for each bit sent), but now they select from three possible bases, which are different rotations of the qubits. In our example, Alice and Bob share only two of the three angles in common, but they could theoretically chose these bases randomly out of a selection.
 
-Both Alice and Bob measures each bit they recieve using one of the three basis of their choosing. Alice then flips her bit as if they have the same base, then Alice's bit is guaranteed to be the opposite of Bob's (disregarding noise), while if they have different bases then their measurement's are a bit random.
+Both Alice and Bob measures each bit they recieve using one of the three bases of their choosing. Alice then flips her bit as if they have the same base, then Alice's bit is guaranteed to be the opposite of Bob's (disregarding noise), while if they have different bases then their measurement's are a bit random.
 
 Finally Alice and Bobs share their lists of bases and discard any bits where they don't share a base, and they now have two identical keys.
 
 ## Deliverables
 This repository includes implementations of two quantum key distribution protocols, E91 and BB84. The protocols are implemented in Python, using Qiskit and Qiskit Aer, and simulates the key exchange between two users (Alice and Bob), while also including noise models and eavesdropping. Additionally, the repository includes a key reconciliation technique, used to fix key inconsistensies, and also privacy amplification. The code for each protocol can be located within their corresponding folder [bb84](/bb84) and [e91](/e91). 
 
-#### BB84
+### BB84
 Within the [bb84](/bb84) folder, there are five python scripts: 
 - [bb84.py](/bb84/bb84.py) - This file implements the BB84 protocol, which includes a key exchange between two parties - Alice and Bob. Due to this being the most "basic" version of BB84, it does not include any eavesdropping. However, it can include noise. This can be included when running the main file. Also, to run the `main` function, a variable object is required. An example of such object can be found within the [test-file](/bb84/bb84_test.py) (named `config`).
 - [bb84_eaves.py](/bb84/bb84_eaves.py) - The structure of this file is quite similar to that of `bb84.py`, with the difference being the inclusion of eavesdropping. That being said, the `main` function is ran the same way as `bb84.py`, with the difference being the inclusion of parameter `threshhold`.
@@ -129,7 +129,7 @@ Within the [bb84](/bb84) folder, there are five python scripts:
 
 [comment]: <> (The sample size is based on parameter `numberOfBits`, and the function will return three values - `error rate, Alice's sample, and Bob's sample`.)
 
-#### E91
+### E91
 Within the [e91](/e91) folder, one should find one python script, namely [e91.py](/e91/e91.py). Other than key exchange, the file also gives the option to simulate eavesdropper. To run the code, run the `sync_bases_and_build_keys` function. More information about the code will be presented under [Documentation of the project](#documentatiohn-of-the-project).
 
 #### Key reconciliation and privacy amplification
@@ -137,47 +137,47 @@ Aside the two folders for the respective protocols, there exist another folder. 
 
 ## Documentation of the Project
 ### BB84
-The BB84 QKD protocol with simulated eavesdropping, noise model and spot checking. Uses Qiskit for quantum circuit simulation.
+The BB84 QKD protocol with simulated eavesdropping, noise model and spot checking. It uses Qiskit for quantum circuit simulation.
 
 #### Components
 - **BB84 protocol**
 - **Noise model**
 - **Spot checking**
 
-#### BB84_protocol
-- **bb84_protocol(vObject, use_noise=False)**: Implements the BB84 protocol
+#### BB84 Protocol 
+- `bb84_protocol(vObject, use_noise=False)`: Implements the BB84 protocol
 > 1. Iterates through bits
 > 2. Performs key sifting (keeps bits where Alice and Bob's bases match)
 > 3. Returns Alice and Bob's sifted keys
 
-- **quantumEavesDropping(aBit, aBase, eBase, use_noise=False)**: Simulates eavesdropping*
-> 1. Creates a quantum circuit based on Alice's bit and basis
-> 2. Applies Eve's basis
+- `quantumEavesDropping(aBit, aBase, eBase, use_noise=False)`: Simulates eavesdropping
+> 1. Creates a quantum circuit based on Alice's bit and bases
+> 2. Applies Eve's bases
 > 3. Measures the qubit
 > 4. Noise optional
 
-- **quantumSend(aBit, aBase, bBase, eBase, use_noise=False)**: Simulates the quantum transmission
+- `quantumSend(aBit, aBase, bBase, eBase, use_noise=False)`: Simulates the quantum transmission
 > 1. Performs eavesdropping
 > 2. Resets the circuit
-> 3. Applies Bob's basis
+> 3. Applies Bob's bases
 > 4. Measures the qubit
 
-- **calc_risk(rate, threshold)**:
+- `calc_risk(rate, threshold)`:
 > 1. Calculates the risk of eavesdropping based on the error rate and a given threshold.
 
-- **main(vObject, threshold, use_noise=False)**: Main function
+- `main(vObject, threshold, use_noise=False)`: Main function
 > 1. Runs the BB84 protocol
 > 2. Performs spot checking
 > 3. Calculates eavesdropping risk
 > 4. Applies key reconciliation
 
 #### Noise model
-- **noise_protocol()**: Noise model for the quantum simulation
+- `noise_protocol()`: Noise model for the quantum simulation
 > 1. Adds a depolarizing error (5% probability) to X and H gates
 > 2. Adds a readout error (5% probability of flipping the measurement result)
 
 #### Spot checking
-- **spot_checking(aKey, bKey, numberOfBits)**: Spot checking to estimate the error rate
+- `spot_checking(aKey, bKey, numberOfBits)`: Spot checking to estimate the error rate
 > 1. Randomly selects a sample of bits from the keys
 > 2. Compares the selected bits between Alice and Bob's keys
 > 3. Calculates the error rate
@@ -185,43 +185,79 @@ The BB84 QKD protocol with simulated eavesdropping, noise model and spot checkin
 
 #### Features
 - **Eavesdropping simulation**: The implementation includes a simulation of an eavesdropper (Eve) attempting to intercept the quantum communication.
+
 - **Noise modeling**: Optional noise can be applied to simulate real-world hinderance in QKD.
+
 - **Spot checking**: A portion of the sifted key is sacrificed to estimate the error rate and detect potential eavesdropping.
+
 - **Risk calculation**: The implementation calculates the risk of eavesdropping based on the observed error rate.
 
 ### E91
-
-### Key reconciliation and privacy amplification
-The key reconciliation and privacy amplification, are crucial steps in quantum key distribution (QKD) protocols, they help ensure that two parties can established a secret key over a insecure channel.
+The E91 QKD protocol with simulated eavesdropping, noise model and spot checking. It uses Qiskit for quantum circuit simulation.
 
 #### Components
-- **Key Reconciliation**: Corrects errors in the keys shared between Alice and Bob. It uses the Cascade protocol, an iterative error correction method.
-- **Privacy Amplification**: Increases the security of the reconciled key by reducing any potential information an eavesdropper might have gained by hashing the keys.
+- E91 Protocol
+- Key reconciliation and privacy amplification
 
-#### Main Functions
-- **key_reconciliation**: Main funciton behind the process
-> 1. It calls cascade_error_correction to fix errors in Bob key.
-> 2. Applies privacy_amplification to the corrected key.
+#### E91 Protocol (with and without noise and eavesdropping)
+- `noise_protocol()`: Simulates noise by adding two types of noise.
+> 1. **Depolarization error** - adds a 1% probability of depolarizing error on X and H gates.
+> 2. **Readout error** - adds a readout error with 5% probability of flipping the measurement result.
+> 3. Only applied if the `useNoise` is set to `True`.
 
-- **cascade_error_correction**: Implements cascade protocol
-> 1. Iterates through multiple rounds, doubling the block size each round.
-> 2. For each block, compares parities and uses binary search to locate and correct errors.
+- `send_qubit(alice_base, bobs_base, eve_present=False, eve_base="", eve_intercepts=0)`: Simulates sending and measuring a qubit between Alice, Bob and (optionally) Eve.
+> 1. Sets up a Bell state (entangled pair of qubits).
+> 2. Measures the spin projection of Alice's and Bob's qubits in the different bases.
+> 3. Returns a 3-bit string of Alice's and Bob's measurements.
+> 4. If Eve is present, she measures Bob's  qubits using her own bases. 
+
+-  `def_measure_all_qubits(aliceBases, bobBases, eve_present = False, eveBases = [], eveInterceptions = [])`: Collets measurement results for all qubits
+> 1. Calls `send_qubit()` for each qubit. 
+> 2. Returns a list of Alice's, Bob's and (optionally) Eve's measurements.
+
+- `sync_bases_and_build_keys(aliceBases, bobBases, eve_present = False, eveBases = [], eveInterceptions = [])`: Builds the shared key, computes the CHSH correlation and checks for eavesdropping. 
+> 1. Calls `measure_all_qubits()` to get the measurements.
+> 2. Compares Alice's and Bob's measurement bases. 
+> 3. Computes the CHSH correlation value. 
+> 4. Calculates the number of mismatched bits if Eve is present. 
+> 5. Prints the bases, the shared key, CHSH correlation, mismatched bits (if Eve is present). 
+
+- `sync_bases_and_build_keys()`: Main function
+> 1. Executes the E91 protocol with the appropriate parameters. 
+> 2. Outputs the shared key, CHSH correlation value and mismatched bits due to interference. 
+
+#### Key reconciliation and privacy amplification
+- `key_reconciliation(alice_key, bob_key, block_size=1, rounds=4)`: Corrects errors in the shared key. 
+> 1. Calls `cascade_error_correction()` to correct errors in Bob's keys.
+> 2. Calls `privacy_amplification()` to the corrected key to reduce any information an eavesdropper might have gained. 
+> 3. Returns the corrected version of Bob's key - `fixed_key` and a key after privacy amplification - `final_key`. 
+
+- `cascade_error_correction(alice_key, bob_key, initial_block_size=1, rounds=4)`:  Implements the *cascade protocol* - an iterative error correction method.
+> 1. Iterates through multiple rounds, doubling the block size for each round.
+> 2. For each block, it compares parities and uses binary search to locate and correct errors.
 > 3. Corrects errors in previous rounds when a new error is found.
+> 4. Returns Bob's key. 
 
-- **privacy_amplification**: Hash function for reconciled key.
+- `parity(block)`: Calculates the parity of a block. 
+> 1. Returns 0 if the sum is even, 1 otherwise.  
+
+- `binary_search_error(alice_block, bob_block)`: Performs binary search.
+> 1. Divides the block in half, checking the parity of the left block. 
+> 2. If parity found, check left half, otherwise check right half. 
+
+- `cascade_to_previous_blocks(alice_key, bob_key, error_index, min_block_size)`: Corrects errors in smaller blocks from previous rounds if error is found in later rounds.
+> 1. Starts with half the block size. 
+> 2. Checks parity for each block. 
+> 3. Calls `binary_search_error()` to locate and correct error. 
+
+- `privacy_amplification(key)`: Hash function for reconciled key.
 > 1. Converts key to a string using it as a seed.
 > 2. Applies the SHA-256 hash to produce a new key
 > 3. Converts the hash to binary string and returns it.
 
--**Helper functions**:
-1. **parity(block)**: Calculates the parity of bits in a block. (count of bits in a block with value 1 is even, the parity bit value is set to 1 making the total count of 1s in the whole set (including the parity bit) an odd number. If the count of bits with a value of 1 is odd, the count is already odd so the parity bit's value is 0).
-2. **binary_search_error(alice_block, bob_block)**: Locates an error within a block using binary search.
-3. **cascade_to_previous_blocks(alice_key, bob_key, error_index, min_block_size)**: Implements the cascade effect, correcting errors in previous rounds.
-
-To summarize: It takes Alice and Bobs keys and run them through the key reconciliation function and use the final key for secure communication.
-
 ## Documentation of testing the project
 The following section will discuss the testing that we did on the respective protocols, and what result it yielded.
+
 ### BB84 
 The [file](/bb84/bb84_test.py) used for testing contains a total of five different test cases, each with their different values. 
 - Test case 1: The first test case used the `bb84.py` code, and performs a key exchange without noise and eavesdropping. 
