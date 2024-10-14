@@ -326,8 +326,13 @@ As mentioned previously, I worked on the BB84 protocol. But to be more specific,
 - **Documentation**: Drafted the first version of the `README.md` page. This included sections: problem statement, deliverables and references. 
 
 ### Jonatan Tuvstedt
-
-
+- **Set up the basics of the project environment**: As I had worked with quantum computing and qiskit instructed the rest of the team in how to set it up.
+- **Made the first draft of the BB84 protocol**: Set up the basics of the BB84 protocol to showcase for the rest of the group how this could work.
+- **Implementation of the E91 protocol**: Worked with Trang on implementing the E91 protocol using pair-programming.  
+- **Implementation of eavesdropping and CHSH correlation value**: Worked with Trang on implementing a CHSH test and eavesdropping for the E91 protocol using pair-programming.  
+- **Adapted the key reconciliation and noise model code for E91**: Fixed a few bugs with key reconciliation and tweaked the noise parameters.
+- **Test cases**: Implemented the test cases for E91 to verify it.
+- **Documentation**: Wrote the background section, overview of the test cases for E91 and the discussion.
 
 ### Trang Nguyen
 - **Implementation of the E91 protocol**: Implemented the E91 protocol with and without noise by pair-programming with Jonatan by checking the code and giving directions. 
