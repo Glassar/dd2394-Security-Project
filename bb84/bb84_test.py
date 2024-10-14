@@ -33,7 +33,7 @@ class test(unittest.TestCase, config):
         print("\n" + "Case 5 (Key Reconciliation)")
         result = bb84_eaves.main(config, config.threshold, False)
         print("\n" + f"Reconciliation key: {result['fixedKey']}")
-        print(f"Hashed key: {result['hashedKey']}")
+        print(f"Hashed key: {result['newAliceKey']}")
         self.assertEqual(result['fixedKey'], result['alice_key'])
 
 if __name__ == '__main__':

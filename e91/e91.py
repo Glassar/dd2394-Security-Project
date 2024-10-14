@@ -4,17 +4,14 @@ import numpy as np
 import random
 from qiskit_aer.noise import NoiseModel, ReadoutError
 from qiskit_aer.noise.errors import depolarizing_error
-import math
-
-import key_reconciliation
 
 simulator = AerSimulator()
 
 # Number of qubits
-n = 1024
+n = 64
 
 useNoise = False
-evePresent = True
+evePresent = False
 eveInterceptionRate = 1
 
 aliceBases = [] 
@@ -36,14 +33,21 @@ def noise_protocol():
     return noise_model
 
 # Bases for Alice and Bob
-for i in range(n):
-    aliceBases.append(random.choice(["X", "Y", "Z"]))
-    bobBases.append(random.choice(["Y", "Z", "W"]))
-    if evePresent:
-        eveBases.append(random.choice(["Y", "Z"])) # Optimal choice of bases, if not shared before than this would be way harder
-        eveIntercepts.append(0 if random.random() > eveInterceptionRate else 1)
+def createBases( n, evePresent = False, eveInterceptionRate = 0):
+    aliceBases = []
+    bobBases = []
 
-def send_qubit(alice_base, bobs_base, eve_present = False, eve_base = "", eve_intercepts = 0):
+    eveBases = []
+    eveIntercepts = []
+    for i in range(n):
+        aliceBases.append(random.choice(["X", "Y", "Z"]))
+        bobBases.append(random.choice(["Y", "Z", "W"]))
+        if evePresent:
+            eveBases.append(random.choice(["Y", "Z"])) # Optimal choice of bases, if not shared before than this would be way harder
+            eveIntercepts.append(0 if random.random() > eveInterceptionRate else 1)
+    return aliceBases, bobBases, eveBases, eveIntercepts
+
+def send_qubit(alice_base, bobs_base, eve_present = False, eve_base = "", eve_intercepts = 0, useNoise = False):
     
     # Charlie generating entangled particles
     qbits = QuantumRegister(2, 'q')
@@ -102,18 +106,18 @@ def send_qubit(alice_base, bobs_base, eve_present = False, eve_base = "", eve_in
     else:
         return simulator.run(t_bell, shots=1, memory=True).result().get_memory(t_bell)[0]
 
-def measure_all_qubits(aliceBases, bobBases, eve_present = False, eveBases = [], eveInterceptions = []):
+def measure_all_qubits(aliceBases, bobBases, eve_present = False, eveBases = [], eveInterceptions = [], useNoise = False):
 
     alicesMeasurement = []
     bobsMeasurement = []
     eveMeasurement = []
 
-    for i in range(n):
+    for i in range(len(aliceBases)):
         if(eve_present):
-            output = send_qubit(aliceBases[i],bobBases[i], eve_present, eveBases[i], eveInterceptions[i])
+            output = send_qubit(aliceBases[i],bobBases[i], eve_present, eveBases[i], eveInterceptions[i], useNoise)
             alicesMeasurement.append(1 if not int (output[2]) else 0)
             bobsMeasurement.append(int (output[1]))
-            if (eveIntercepts[i]):
+            if (eveInterceptions[i]):
                 eveMeasurement.append(int (output[0]))
             else:
                 eveMeasurement.append(np.nan)
@@ -125,25 +129,18 @@ def measure_all_qubits(aliceBases, bobBases, eve_present = False, eveBases = [],
 
     return alicesMeasurement, bobsMeasurement, eveMeasurement
 
-def sync_bases_and_build_keys(aliceBases, bobBases, eve_present = False, eveBases = [], eveInterceptions = []):
-
-    alicesMeasurement, bobsMeasurement, eveMeasurement = measure_all_qubits(aliceBases, bobBases, eve_present, eveBases, eveInterceptions)
-    
-    print("Alice's bases: X, Y, Z")
-    print("Bob's bases: Y, Z, W")
-
-    if(eve_present):
-        print("Eve's bases: Y, Z")
+def sync_bases_and_build_keys(aliceBases, bobBases, eve_present = False, eveBases = [], eveInterceptions = [], useNoise = False):
+    alicesMeasurement, bobsMeasurement, eveMeasurement = measure_all_qubits(aliceBases, bobBases, eve_present, eveBases, eveInterceptions, useNoise)
     
     aliceKey = []
     bobKey = []
     eveKey = []
-    misMatchedBits = 0
+    
 
     chsh_counts = np.zeros((4,4))
     
     # Compare bases 
-    for i in range(n):
+    for i in range(len(aliceBases)):
         if(aliceBases[i] == bobBases[i]):
             aliceKey.append(alicesMeasurement[i])
             bobKey.append(bobsMeasurement[i])   
@@ -167,34 +164,27 @@ def sync_bases_and_build_keys(aliceBases, bobBases, eve_present = False, eveBase
     expectZW = (chsh_counts[3][0] - chsh_counts[3][1] - chsh_counts[3][2] + chsh_counts[3][3])/(sum(chsh_counts[3]) if sum(chsh_counts[3]) else 1)
 
     corr = expectXY - expectXW + expectZY + expectZW
-    
-    print("CHSH correlation value:", round(corr, 3))
-    print("Diff from 2*sqrt(2):", round((2*math.sqrt(2) - corr), 3))
-    
-    print(f"Length of key: {len(aliceKey)}")
-    print(f"Alice's key: {aliceKey}")
-    print(f"Bob's key: {bobKey}")
-    
-    if (eve_present):
-        for i in range(len(aliceKey)):
-            if (aliceKey[i] != bobKey[i]):
-                misMatchedBits += 1
-        print(f"Eve's key: {eveKey}")
-        print(f"Mismatched bits: {misMatchedBits}")
-        
-    return aliceKey, bobKey, eveKey
 
-aliceKey, bobKey, eveKey = sync_bases_and_build_keys(aliceBases, bobBases, evePresent, eveBases, eveIntercepts)
-
-fixedBobKey, newBobKey, newAliceKey = key_reconciliation.key_reconciliation(aliceKey, bobKey)
-
-print(fixedBobKey)
-misMatchedBits = 0
-if (evePresent):
+    misMatchedBits = 0
     for i in range(len(aliceKey)):
-        if (aliceKey[i] != fixedBobKey[i]):
+        if (aliceKey[i] != bobKey[i]):
             misMatchedBits += 1
 
-    print(f"Mismatched bits: {misMatchedBits}")
+    print(f"\nAlice's key: {aliceKey}")
+    print(f"Bob's key  : {bobKey}")
+    if evePresent: print(f"Eve's key  : {eveKey} \n\t(where NaN means eve's value was discarded as she knows it was incorrect)")
 
-print(f"Shared key: {newBobKey}")
+    print(f"\nNumber of bits sent: {len(aliceBases)}")
+    print(f"Number of bits in sifted key: {len(aliceKey)}")
+    print(f"Number of miss matched bits: {misMatchedBits}")
+
+    print(f"CHSH test: {round(corr, 3)}\n\t(should be close to 2*sqrt(2) ~ 2.828 if there is no interference)")
+        
+    return round(corr, 3), misMatchedBits, aliceKey, bobKey, eveKey
+
+# aliceBases, bobBases, eveBases, eveIntercepts = createBases(evePresent, eveInterceptionRate)
+
+# chsh, missmatchedBits, aliceKey, bobKey, eveKey = sync_bases_and_build_keys(aliceBases, bobBases, evePresent, eveBases, eveIntercepts)
+
+# fixedBobKey, newBobKey, newAliceKey = key_reconciliation.key_reconciliation(aliceKey, bobKey)
+

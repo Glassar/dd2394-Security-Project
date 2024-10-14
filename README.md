@@ -46,7 +46,9 @@ Members:
 1. Clone the repository:<br/>
 ` git clone https://github.com/Glassar/dd2394-Security-Project.git`
 
-2. Install dependencies: <br/>
+2. Make sure to have python3 and pip installed
+
+3. Install dependencies: <br/>
 `pip install qiskit`<br/>
 `pip install qiskit_aer`
 
@@ -55,7 +57,7 @@ Members:
 Run the test file `bb84_test.py` with `python3 bb84_test.py`
 
 ### E91
-Run the test file `file_name.py` with `file_name.py`
+Run the test file `e91_test.py` with `python3 e91_test.py`
 
 ## Problem description
 Quantum mechanics and quantum computing offers a new way of cryptographic key distribution that is fundamentally secure against undetected eavesdropping. This security stems from a fundamental principle of quantum mechanics: any measurement of a quantum state changes the state itself. In other words, if an eavesdropper intercepts and measures the quantum state before it reaches the intended recipient, the state will be altered, allowing both parties to detect the intrusion. 
@@ -275,7 +277,17 @@ As each test case varies, it allowed us to grasp how the respective variable con
 
 ### E91
 
+The [file](/e91/e91_test.py) used for testing contains a total of five different test cases, each with their different values. 
 
+- Test case 1: The first test case performs key distribution without noise and eavesdropping. 
+- Test case 2: The second test case performs key distribution with noise
+- Test case 3: The third test case performs key distribution with eavesdropping intercepting 50% of bits, and without noise.
+- Test case 4: The forth test case performs key distribution with eavesdropping intercepting 100% of bits, and without noise.
+- Test case 5: The fifth test case performs key distribution with eavesdropping intercepting 100% of bits and with noise.
+
+An important thing to note is that the CHSH test has a higher variance the lower nBits is and as such we ran all our tests with nBits=1024. But this is also significantly slower.
+
+The different test cases lets us showcase both the ideal protocol without interference, as well as how real world difficulties affect it, both separately and combined. And as all tests use the same input we can also observe how the CHSH test value steadily decreases with more and more interference. Note that even with fixed inputs our outputs are non deterministic as the quantum process also is non deterministic.
 
 ## Contribution
 To improve efficiency, the work was split into two parts based on the two protocols. While Alex and Anton worked on BB84, Jonatan and Trang worked on E91. 

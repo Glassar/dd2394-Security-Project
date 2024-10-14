@@ -86,7 +86,7 @@ def main(vObject, threshold, use_noise=False):
     risk = calc_risk(error_eve, threshold)
 
     # key_reconciliation
-    fixedKey, hashedKey = key_reconciliation.key_reconciliation(aKey, bKey)
+    fixedKey, newAliceKey, newBobKey = key_reconciliation.key_reconciliation(aKey, bKey)
 
     # Output data
     print(f"Alice's key: {aKey}")
@@ -102,7 +102,8 @@ def main(vObject, threshold, use_noise=False):
     return {
         "alice_key": aKey,
         "fixedKey": fixedKey,
-        "hashedKey": hashedKey
+        "newAliceKey": newAliceKey,
+        "newBobKey": newBobKey,
     }
 
 # Example of execution 
