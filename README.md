@@ -289,6 +289,25 @@ An important thing to note is that the CHSH test has a higher variance the lower
 
 The different test cases lets us showcase both the ideal protocol without interference, as well as how real world difficulties affect it, both separately and combined. And as all tests use the same input we can also observe how the CHSH test value steadily decreases with more and more interference. Note that even with fixed inputs our outputs are non deterministic as the quantum process also is non deterministic.
 
+## Discussion
+
+As is shown in the tests for both the BB84 and E91 protocols work to distribute a shared key between two parties using quantum mechanics. And while we do this in a quantum computing simulator, and just pretend to send data it still shows that this technology works even if the infrastructure might not be there. 
+
+### Benefits
+The benefits of using quantum mechanics to distribute cryptographic keys is that you can physically guarantee that if someone is eavesdropping, then you can detect it. This is the big benefit of quantum key distribution as this ability to learn if someone is eavesdropping is unique to quantum mechanics thanks to the fact that making measurements on quantum states modifies said states. 
+
+### Comparison
+
+So both BB84 and E91 has benefits and drawbacks. The main benefits of BB84 is its simplicity with it only utilising a few gates, meaning it would be cheaper and easier to set up the infrastructure for it. It can also use a larger share of the sent bits in its final key with Alice and Bob sharing bases 50% of the time. A drawback with BB84 is its need to use spot checking meaning it needs to sacrifice some of the bits that would otherwise have been used in the final key.
+
+The main strength of E91 is its ability to utilise the bits not being used in the key to calculate if there has been interference. But this comes at the cost of being a much more complex protocol requiring more gates. And the fact that only 2/9 bits can be used in the key as that is the probability of Alice and Bob sharing bases.
+
+### Drawbacks
+
+There are however several drawbacks. First up is that quantum key distribution requires significant infrastructure that is not going to be in place. While one way of sending the quantum particles is as light through optical cables that are common, the infrastructure to place said particles in a specific quantum state and decode them is not. This will likely be what will hold back quantum key distribution the most as the technology for precise quantum control is expensive with today's most advanced quantum computers only having about a thousand qubits.
+
+In addition to the technical limitations there are also some more cryptographic limitations. The central one is the fact that while quantum mechanics can guarantee security it has no way of confirming authenticity. Which is why we still need to rely on an authenticated classical channel to swap bases to calculate the final key. This means that you still require either a shared secret or classical channels authenticated with a public and private key, which is what quantum key distribution would ideally move away from. Because at the same time quantum technology gets better enabling quantum key distribution, it also opens the way for Shor's algorithm can factor large integers effectively which can be used to crack AES.
+
 ## Contribution
 To improve efficiency, the work was split into two parts based on the two protocols. While Alex and Anton worked on BB84, Jonatan and Trang worked on E91. 
 

@@ -5,6 +5,8 @@ import random
 from qiskit_aer.noise import NoiseModel, ReadoutError
 from qiskit_aer.noise.errors import depolarizing_error
 
+import key_reconciliation;
+
 simulator = AerSimulator()
 
 # Number of qubits
@@ -179,6 +181,12 @@ def sync_bases_and_build_keys(aliceBases, bobBases, eve_present = False, eveBase
     print(f"Number of miss matched bits: {misMatchedBits}")
 
     print(f"CHSH test: {round(corr, 3)}\n\t(should be close to 2*sqrt(2) ~ 2.828 if there is no interference)")
+
+    if evePresent or useNoise:
+        fixed_key, newAliceKey, newBobKey = key_reconciliation.key_reconciliation(aliceKey, bobKey)
+
+        print(f"\nBob's fixed key: {fixed_key}")
+        print(f"Final shared key: {newAliceKey}")
         
     return round(corr, 3), misMatchedBits, aliceKey, bobKey, eveKey
 
