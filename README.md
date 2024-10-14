@@ -254,7 +254,7 @@ The E91 QKD protocol with simulated eavesdropping, noise model and spot checking
 
 - `privacy_amplification(key)`: Hash function for reconciled key.
 > 1. Converts key to a string using it as a seed.
-> 2. Applies the SHA-256 hash to produce a new key
+> 2. Applies the md-5 hash to produce a new key
 > 3. Converts the hash to binary string and returns it.
 
 ## Documentation of testing the project
