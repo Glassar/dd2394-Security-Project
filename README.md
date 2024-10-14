@@ -268,8 +268,7 @@ The [file](/bb84/bb84_test.py) used for testing contains a total of five differe
 - Test case 4: The fourth test is quite similar to test case 3, as it also executes the `bb84_eaves.py` code, but with the difference being that it includes noise,
 - Test case 5: The fifth test case is the same as test case 4, with the difference being the inclusion of key reconciliation.
 
-As the test cases differentiated from each other, it allowed us to grasp how the respective variable conditions affected the key exchange. Given that the configuration of the variable object stayed the same for all the test cases, it made it possible to evaluate how the basic bb84 protocol operates, as well as how applying noise and eavesdropping affected the exchange. For the test case, we used the following configuration: 
-For the execution, the variables within the config was set to the following:
+As the test cases differed from each other, we were able to grasp how the respective variable conditions affected the key exchange. Also, as the configuration of the variable object stayed the same for all the test cases, it made it easier to evaluate and understand how the basic bb84 protocol operates, and how applying noise and eavesdropping affected the exchange. For the test cases, the configuration that showed the most promising result was the following: 
 ```py
 nBits = 1056
 sampleDivisor = 2
