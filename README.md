@@ -4,15 +4,15 @@ The purpose of this project is to implement quantum key distribution (QKD) proto
 ## Group 8
 Members:
 - Alex Shariat Zadeh - alexsz@kth.se
-- Anton Brömster
+- Anton Brömster - antbro@kth.se
 - Jonatan Tuvstedt
 - Trang Nguyen
 
 ## Table of Contents
-1. [Installation](#introduction)
+1. [Installation](#installation)
 2. [Usage](#usage)
-    1. [BB84](#bb84)
-    2. [E91](#e91)
+    1. [BB84 Protocol](#bb84)
+    2. [E91 Protocol](#e91)
 3. [Problem Description](#problem-description)
     1. [Protocols](#protocols)
     2. [Interference Tests](#interference-tests)
@@ -22,8 +22,8 @@ Members:
     1. [Crash Course in Quantum Computing](#crash-course-in-quantum-computing)
     2. [Bell Circuit](#bell-circuit)
     3. [The Assumptions of the Project](#the-assumptions-of-the-project)
-    4. [BB84 Protocol](#bb84-protocol)
-    5. [E91 Protocol](#e91-protocol)
+    4. [BB84 Protocol](#bb84-1)
+    5. [E91 Protocol](#e91-1)
 5. [Deliverables](#deliverables)
 6. [Documentation of the Project](#documentation-of-the-project)
     1. [BB84](#bb84-3)
@@ -35,12 +35,16 @@ Members:
     2. [E91](#e91-3)
         1. [Components](#components-1)
         2. [E91 Protocol](#e91_protocol)
-        3. [Key Reconciliation and Privacy Amplification](#key-reconciliation-and-privacy-amplification-3)
+        3. [Key Reconciliation and Privacy Amplification](#key-reconciliation-and-privacy-amplification-2)
 7. [Documentation of testing the project](#documentation-of-testing-the-project)
     1. [BB84](#bb84-4)
     2. [E91](#e91-4)
-9. [Contribution](#contribution)
-10. [References](#references)
+8. [Discussion](#discussion)
+    1. [Benefits](#benefits)
+    2. [Comparison](#comparison)
+    3. [Drawbacks](#drawbacks) 
+10. [Contribution](#contribution)
+11. [References](#references)
 
 ## Installation
 1. Clone the repository:<br/>
