@@ -190,9 +190,3 @@ def sync_bases_and_build_keys(aliceBases, bobBases, eve_present = False, eveBase
         
     return round(corr, 3), misMatchedBits, aliceKey, bobKey, eveKey
 
-# aliceBases, bobBases, eveBases, eveIntercepts = createBases(evePresent, eveInterceptionRate)
-
-# chsh, missmatchedBits, aliceKey, bobKey, eveKey = sync_bases_and_build_keys(aliceBases, bobBases, evePresent, eveBases, eveIntercepts)
-
-# fixedBobKey, newBobKey, newAliceKey = key_reconciliation.key_reconciliation(aliceKey, bobKey)
-
