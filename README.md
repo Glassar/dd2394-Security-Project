@@ -327,8 +327,8 @@ As mentioned previously, I worked on the BB84 protocol. But to be more specific,
 
 - **Implementation of the BB84 protocol**: Updated the basic version of the protocol that was orginially made by Jonatan. This mostly consisted of making a new output format and altering the structure of the program.  
 - **Eavesdropping and noise simulation**: Implemented features to simulate eavesdropping attempts and noise. This included changes in bb84.py and bb84_eaves.py. 
-- **Test cases**: Implemented test cases for verification of the of the BB84 protocol. This included cases where eavedropping and noise wasn't used, and cases where they were used. 
-- **Documentation**: Drafted the first version of the `README.md` page. This included sections: problem statement, deliverables and references. 
+- **Test cases**: Implemented test cases for verification of the of the BB84 protocol. This included cases where eavedropping and noise wasn't used, test cases where they were used separately, and a test case for when both were active.  
+- **Documentation**: Drafted the first version of the `README.md` page. This included sections: problem statement, deliverables and references. I also wrote on the later versions of the README.md but why contribution was smaller (in comparison to the first draft). 
 
 ### Jonatan Tuvstedt
 - **Set up the basics of the project environment**: As I had worked with quantum computing and qiskit instructed the rest of the team in how to set it up.
