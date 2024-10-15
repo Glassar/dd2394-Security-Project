@@ -39,8 +39,12 @@ Members:
 7. [Documentation of testing the project](#documentation-of-testing-the-project)
     1. [BB84](#bb84-4)
     2. [E91](#e91-4)
-9. [Contribution](#contribution)
-10. [References](#references)
+8. [Discussion](#discussion)
+    1. [Benefits](#benefits)
+    2. [Comparison](#comparison)
+    3. [Drawbacks](#drawbacks) 
+10. [Contribution](#contribution)
+11. [References](#references)
 
 ## Installation
 1. Clone the repository:<br/>
