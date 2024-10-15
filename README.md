@@ -3,7 +3,7 @@ The purpose of this project is to implement quantum key distribution (QKD) proto
 
 ## Group 8
 Members:
-- Alex Shariat Zadeh
+- Alex Shariat Zadeh - alexsz@kth.se
 - Anton Brömster
 - Jonatan Tuvstedt
 - Trang Nguyen
