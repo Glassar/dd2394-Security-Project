@@ -9,7 +9,7 @@ Members:
 - Trang Nguyen
 
 ## Table of Contents
-1. [Installation](#introduction)
+1. [Installation](#installation)
 2. [Usage](#usage)
     1. [BB84](#bb84)
     2. [E91](#e91)
